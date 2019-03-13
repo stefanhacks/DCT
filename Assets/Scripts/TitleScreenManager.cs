@@ -16,6 +16,7 @@ public class TitleScreenManager : MonoBehaviour
             System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
         #endif
         
+        // If save file doesn't exist yet, must create it with a default player.
         if (DataManager.LoadPlayers() == null){
             GameObject emptyPlayer = new GameObject("emptyPlayer");
             emptyPlayer.AddComponent<Player>();
@@ -26,10 +27,12 @@ public class TitleScreenManager : MonoBehaviour
                 );
         }
 
+        // Loads data object.
         data = DataManager.LoadPlayers();
         Invoke("ShowTitleMenu", 1);
     }
 
+    // UI Code
     public void ShowTitleMenu()
     {
         RootTitle.SetActive(true);
@@ -45,26 +48,31 @@ public class TitleScreenManager : MonoBehaviour
         LoadHighScores();
     }
 
+    // Sets high score screen.
     public void LoadHighScores()
     {
+        // Uses LINQ to sort the player data by highscore and get the top three.
         KeyValuePair<string, Dictionary<string, int>>[] highscores = 
             data.allPlayers.OrderByDescending(s => s.Value["highscore"]).Take(3).ToArray();
 
-        string names = "", scores = "";
+        // Sets up the actual text in menu.
+        Text nameTextObj = RootHighScores.transform.Find("Name").GetComponent<Text>();
+        Text scoreTextObj = RootHighScores.transform.Find("Scores").GetComponent<Text>();
+        nameTextObj.text = "";
+        scoreTextObj.text = "";
+
         for (int i = 0; i < 3; i++)
         {
             if (i < highscores.Length)
             {
-                names += highscores[i].Key + "\n";
-                scores += highscores[i].Value["highscore"] + "\n";
-            } else
-            {
-                names += "-\n";
-                scores += "-\n";
+                nameTextObj.text += highscores[i].Key + "\n";
+                scoreTextObj.text += highscores[i].Value["highscore"] + "\n";
             }
-            
+            else
+            {
+                nameTextObj.text += "-\n";
+                scoreTextObj.text += "-\n";
+            }            
         }
-        RootHighScores.transform.Find("Name").GetComponent<Text>().text = names;
-        RootHighScores.transform.Find("Scores").GetComponent<Text>().text = scores;
     }
 }
