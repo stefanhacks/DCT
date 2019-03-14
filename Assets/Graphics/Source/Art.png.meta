@@ -18,19 +18,19 @@ TextureImporter:
     21300026: Head_B
     21300028: Head_C
     21300030: Head_D
-    21300032: Body_A
-    21300034: Body_B
-    21300036: Body_C
-    21300038: Body_D
-    21300040: Pants_A0
-    21300042: Pants_B0
-    21300044: Pants_C0
-    21300046: Pants_D0
+    21300032: Torso_A
+    21300034: Torso_B
+    21300036: Torso_C
+    21300038: Torso_D
+    21300040: Legs_A0
+    21300042: Legs_B0
+    21300044: Legs_C0
+    21300046: Legs_D0
     21300048: Mouth_B
-    21300050: Pants_A1
-    21300052: Pants_C1
+    21300050: Legs_A1
+    21300052: Legs_C1
   externalObjects: {}
-  serializedVersion: 9
+  serializedVersion: 7
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -72,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 2
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -444,7 +444,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Body_A
+      name: Torso_A
       rect:
         serializedVersion: 2
         x: 54
@@ -464,7 +464,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Body_B
+      name: Torso_B
       rect:
         serializedVersion: 2
         x: 451
@@ -484,7 +484,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Body_C
+      name: Torso_C
       rect:
         serializedVersion: 2
         x: 848
@@ -504,7 +504,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Body_D
+      name: Torso_D
       rect:
         serializedVersion: 2
         x: 1251
@@ -524,7 +524,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pants_A0
+      name: Legs_A0
       rect:
         serializedVersion: 2
         x: 100
@@ -544,7 +544,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pants_B0
+      name: Legs_B0
       rect:
         serializedVersion: 2
         x: 427
@@ -564,7 +564,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pants_C0
+      name: Legs_C0
       rect:
         serializedVersion: 2
         x: 893
@@ -584,7 +584,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pants_D0
+      name: Legs_D0
       rect:
         serializedVersion: 2
         x: 1225
@@ -624,7 +624,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pants_A1
+      name: Legs_A1
       rect:
         serializedVersion: 2
         x: 100
@@ -644,7 +644,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pants_C1
+      name: Legs_C1
       rect:
         serializedVersion: 2
         x: 892
