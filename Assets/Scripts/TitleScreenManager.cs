@@ -7,6 +7,7 @@ using System.Linq;
 public class TitleScreenManager : MonoBehaviour
 {
     public GameObject RootTitle, RootTitleMenu, RootHighScores, RootBG;
+    public Text scoreNames, scorePoints;
     private GameData data;
 
     public void Awake()
@@ -56,22 +57,19 @@ public class TitleScreenManager : MonoBehaviour
             data.allPlayers.OrderByDescending(s => s.Value["highscore"]).Take(3).ToArray();
 
         // Sets up the actual text in menu.
-        Text nameTextObj = RootHighScores.transform.Find("Name").GetComponent<Text>();
-        Text scoreTextObj = RootHighScores.transform.Find("Scores").GetComponent<Text>();
-        nameTextObj.text = "";
-        scoreTextObj.text = "";
-
+        scoreNames.text = "";
+        scorePoints.text = "";
         for (int i = 0; i < 3; i++)
         {
             if (i < highscores.Length)
             {
-                nameTextObj.text += highscores[i].Key + "\n";
-                scoreTextObj.text += highscores[i].Value["highscore"] + "\n";
+                scoreNames.text += highscores[i].Key + "\n";
+                scorePoints.text += highscores[i].Value["highscore"] + "\n";
             }
             else
             {
-                nameTextObj.text += "-\n";
-                scoreTextObj.text += "-\n";
+                scoreNames.text += "-\n";
+                scorePoints.text += "-\n";
             }            
         }
     }
