@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PPNameField
   - PPScoreField
+  - CPCharacterArea
   layers:
   - Default
   - TransparentFX
