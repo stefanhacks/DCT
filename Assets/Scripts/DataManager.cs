@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class DataManager {
     
-    public static void SavePlayerData(Player currentPlayer, Dictionary<string, Dictionary<string, int>> playerBase)
+    public static void SavePlayerData(PlayerData currentPlayer, Dictionary<string, Dictionary<string, int>> playerBase)
     {
         // Creates path to file.
         string dataPath = Application.persistentDataPath + "/players.dct";

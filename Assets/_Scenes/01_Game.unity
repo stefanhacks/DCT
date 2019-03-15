@@ -1337,7 +1337,7 @@ GameObject:
   - component: {fileID: 212851023}
   - component: {fileID: 212851024}
   m_Layer: 0
-  m_Name: Vertical Group
+  m_Name: '[SubRoot] SelectPlayerMenu'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1378,7 +1378,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 25
     m_Right: 25
-    m_Top: 75
+    m_Top: 50
     m_Bottom: 25
   m_ChildAlignment: 1
   m_Spacing: 0
@@ -2319,52 +2319,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 609369525}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &654517704
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 654517706}
-  - component: {fileID: 654517705}
-  m_Layer: 0
-  m_Name: TitleScreenManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &654517705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 654517704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ade679ac13dbad64288240160936f7e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RootTitle: {fileID: 0}
-  RootTitleMenu: {fileID: 1828478433}
-  RootHighScores: {fileID: 0}
-  RootBG: {fileID: 339602549}
-  scoreNames: {fileID: 0}
-  scorePoints: {fileID: 0}
---- !u!4 &654517706
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 654517704}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &694063395
 GameObject:
   m_ObjectHideFlags: 0
@@ -4329,7 +4283,7 @@ GameObject:
   - component: {fileID: 1417132742}
   m_Layer: 0
   m_Name: ScoreField
-  m_TagString: Untagged
+  m_TagString: PPScoreField
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4373,9 +4327,9 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 48
+    m_FontSize: 70
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 2
     m_MaxSize: 80
     m_Alignment: 4
@@ -4384,7 +4338,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 98888
+  m_Text: -2
 --- !u!222 &1417132743
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4983,7 +4937,7 @@ GameObject:
   - component: {fileID: 1594545086}
   m_Layer: 0
   m_Name: NameField
-  m_TagString: Untagged
+  m_TagString: PPNameField
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5029,16 +4983,16 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 48
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 2
-    m_MaxSize: 80
+    m_MaxSize: 70
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: WWWWWWWW
+  m_Text: 1234567
 --- !u!222 &1594545087
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6261,7 +6215,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 70
+    m_Top: 55
     m_Bottom: 0
   m_ChildAlignment: 1
   m_Spacing: 20
@@ -6533,6 +6487,73 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2013584231}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2017223835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2017223837}
+  - component: {fileID: 2017223838}
+  - component: {fileID: 2017223836}
+  - component: {fileID: 2017223839}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2017223836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2017223835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee09af87fa6b3b6489c453482f711c6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectPlayerMenu: {fileID: 212851022}
+--- !u!4 &2017223837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2017223835}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2017223838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2017223835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3111fd72b2a929b4697b3869f2bc1f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2017223839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2017223835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32169c1470f76a498742ea30771550c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerName: 
+  highScore: 0
 --- !u!1 &2021182068
 GameObject:
   m_ObjectHideFlags: 0

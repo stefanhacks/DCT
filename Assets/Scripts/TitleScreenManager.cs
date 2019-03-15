@@ -20,12 +20,14 @@ public class TitleScreenManager : MonoBehaviour
         // If save file doesn't exist yet, must create it with a default player.
         if (DataManager.LoadPlayers() == null){
             GameObject emptyPlayer = new GameObject("emptyPlayer");
-            emptyPlayer.AddComponent<Player>();
+            emptyPlayer.AddComponent<PlayerData>();
 
             DataManager.SavePlayerData(
-                emptyPlayer.GetComponent<Player>(), 
+                emptyPlayer.GetComponent<PlayerData>(), 
                 new Dictionary<string, Dictionary<string, int>>()
                 );
+
+            Destroy(emptyPlayer);
         }
 
         // Loads data object.
