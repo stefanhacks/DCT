@@ -1569,10 +1569,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade679ac13dbad64288240160936f7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rootTitle: {fileID: 0}
-  rootTitleMenu: {fileID: 0}
-  rootHighScores: {fileID: 0}
-  rootBG: {fileID: 0}
+  rootTitle: {fileID: 1731523955}
+  rootTitleMenu: {fileID: 1828478433}
+  rootHighScores: {fileID: 2042386652}
+  rootBG: {fileID: 339602549}
   scoreNames: {fileID: 434821682}
   scorePoints: {fileID: 461988236}
 --- !u!4 &654517706

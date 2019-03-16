@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 // Class used for storing and serializing saved players from the game.
 [System.Serializable]
@@ -30,5 +31,10 @@ public class GameData {
             allPlayers[lastPlayer] = currentPlayerData;
         else
             allPlayers.Add(lastPlayer, currentPlayerData);
+    }
+
+    internal bool PlayerExists(string name)
+    {
+        return allPlayers.Keys.Where(n => n.ToLower() == name.ToLower()).Count() != 0;
     }
 }

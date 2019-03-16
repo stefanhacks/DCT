@@ -13,6 +13,20 @@ public class GameManager : MonoBehaviour {
 
     private void Awake()
     {
+        // If save file doesn't exist yet, must create it with a default player.
+        if (DataManager.LoadPlayers() == null)
+        {
+            GameObject emptyPlayer = new GameObject("emptyPlayer");
+            emptyPlayer.AddComponent<PlayerData>();
+
+            DataManager.SavePlayerData(
+                emptyPlayer.GetComponent<PlayerData>(),
+                new Dictionary<string, Dictionary<string, int>>()
+                );
+
+            Destroy(emptyPlayer);
+        }
+
         // Loads all players and sets the current based on the last one played.
         data = DataManager.LoadPlayers();
         currentPlayer = this.gameObject.GetComponent<PlayerData>();
@@ -29,14 +43,6 @@ public class GameManager : MonoBehaviour {
             {"torso", torsoParts},
             {"legs", legsParts},
         };
-
-        this.gameObject.GetComponent<GameMenuManager>().RefreshPlayerModel(new Sprite[] {
-            eyesParts[currentPlayer.bodyComposition["eyes"]],
-            headParts[currentPlayer.bodyComposition["head"]],
-            mouthParts[currentPlayer.bodyComposition["mouth"]],
-            torsoParts[currentPlayer.bodyComposition["torso"]],
-            legsParts[currentPlayer.bodyComposition["legs"]]
-        });
     }
 
     public PlayerData GetCurrentPlayer()
@@ -44,6 +50,17 @@ public class GameManager : MonoBehaviour {
         return currentPlayer;
     }
 
+    internal Sprite[] GetPlayerSprites()
+    {
+        return new Sprite[] {
+            eyesParts[currentPlayer.bodyComposition["eyes"]],
+            headParts[currentPlayer.bodyComposition["head"]],
+            mouthParts[currentPlayer.bodyComposition["mouth"]],
+            torsoParts[currentPlayer.bodyComposition["torso"]],
+            legsParts[currentPlayer.bodyComposition["legs"]]
+        };
+    }
+    
     public void SetCurrentPlayer(PlayerData newPlayer)
     {
         currentPlayer = newPlayer;
@@ -76,5 +93,30 @@ public class GameManager : MonoBehaviour {
 
         this.GetComponent<GameMenuManager>().RefreshPlayerModel(part, nextSprite);
         DataManager.SavePlayerData(currentPlayer, data.allPlayers);
+    }
+
+    public bool CheckPlayerKey(string name)
+    {
+        return data.PlayerExists(name);
+    }
+
+    internal void CreateNewPlayer(string newPlayerName)
+    {
+        // Creates mock object to house new PlayerData.
+        GameObject newPlayer = new GameObject(newPlayerName);
+        PlayerData newPlayerData = newPlayer.AddComponent<PlayerData>();
+
+        // Randomizes values for new Player.
+        newPlayerData.playerName = newPlayerName;
+        newPlayerData.bodyComposition["eyes"] = Random.Range(0, eyesParts.Length);
+        newPlayerData.bodyComposition["head"] = Random.Range(0, headParts.Length);
+        newPlayerData.bodyComposition["mouth"] = Random.Range(0, mouthParts.Length);
+        newPlayerData.bodyComposition["torso"] = Random.Range(0, torsoParts.Length);
+        newPlayerData.bodyComposition["legs"] = Random.Range(0, legsParts.Length);
+
+        // Saves data, replaces current player and deletes mock object.
+        DataManager.SavePlayerData(newPlayerData, data.allPlayers);
+        currentPlayer = newPlayerData;
+        Destroy(newPlayer);
     }
 }
