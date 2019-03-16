@@ -41,30 +41,20 @@ public class GameMenuManager : MonoBehaviour {
         areaToRefresh.GetComponent<SpriteRenderer>().sprite = nextSprite;
     }
 
-    public void ToggleNewPlayer(bool toggle)
+    public void TogglePopPanel(GameObject panel)
     {
-        dialogBoxNew.SetActive(toggle);
-        popUps.GetComponent<GraphicRaycaster>().enabled = toggle;
-        gameMenu.GetComponent<GraphicRaycaster>().enabled = !toggle;
+        // Checks panel for it's current "active" status and flips it.
+        bool newStatus = !panel.activeSelf;
+
+        // Graphic Raycasters also use this state to define their status.
+        panel.SetActive(newStatus);
+        popUps.GetComponent<GraphicRaycaster>().enabled = newStatus;
+        gameMenu.GetComponent<GraphicRaycaster>().enabled = !newStatus;
     }
 
-    public void ToggleLoadPlayer(bool toggle)
+    public void SetPopUpGFXRaycaster(bool set)
     {
-        dialogBoxLoad.SetActive(toggle);
-        popUps.GetComponent<GraphicRaycaster>().enabled = toggle;
-        gameMenu.GetComponent<GraphicRaycaster>().enabled = !toggle;
-    }
-
-    public void ToggleDeletePlayer(bool toggle)
-    {
-        dialogBoxDelete.SetActive(toggle);
-        popUps.GetComponent<GraphicRaycaster>().enabled = toggle;
-        gameMenu.GetComponent<GraphicRaycaster>().enabled = !toggle;
-    }
-
-    public void SetGFXRaycasters(bool set)
-    {
+        // Used to make sure load player popup is inactive during dropdown 
         popUps.GetComponent<GraphicRaycaster>().enabled = set;
-        gameMenu.GetComponent<GraphicRaycaster>().enabled = set;
     }
 }
