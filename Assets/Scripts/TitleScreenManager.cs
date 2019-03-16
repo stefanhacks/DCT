@@ -6,7 +6,7 @@ using System.Linq;
 
 public class TitleScreenManager : MonoBehaviour
 {
-    public GameObject RootTitle, RootTitleMenu, RootHighScores, RootBG;
+    public GameObject rootTitle, rootTitleMenu, rootHighScores, rootBG;
     public Text scoreNames, scorePoints;
     private GameData data;
 
@@ -38,16 +38,16 @@ public class TitleScreenManager : MonoBehaviour
     // UI Code
     public void ShowTitleMenu()
     {
-        RootTitle.SetActive(true);
-        RootHighScores.SetActive(false);
-        RootTitleMenu.SetActive(true);
+        rootTitle.SetActive(true);
+        rootHighScores.SetActive(false);
+        rootTitleMenu.SetActive(true);
     }
 
     public void ShowHighScores()
     {
-        RootTitle.SetActive(false);
-        RootTitleMenu.SetActive(false);
-        RootHighScores.SetActive(true);
+        rootTitle.SetActive(false);
+        rootTitleMenu.SetActive(false);
+        rootHighScores.SetActive(true);
         LoadHighScores();
     }
 
