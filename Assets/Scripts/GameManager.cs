@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(GameMenuManager), typeof(PlayerData))]
 public class GameManager : MonoBehaviour {
@@ -13,24 +14,13 @@ public class GameManager : MonoBehaviour {
 
     private void Awake()
     {
-        // If save file doesn't exist yet, must create it with a default player.
-        if (DataManager.LoadPlayers() == null)
-        {
-            GameObject emptyPlayer = new GameObject("emptyPlayer");
-            emptyPlayer.AddComponent<PlayerData>();
-
-            DataManager.SavePlayerData(
-                emptyPlayer.GetComponent<PlayerData>(),
-                new Dictionary<string, Dictionary<string, int>>()
-                );
-
-            Destroy(emptyPlayer);
-        }
-
         // Loads all players and sets the current based on the last one played.
         data = DataManager.LoadPlayers();
-        currentPlayer = this.gameObject.GetComponent<PlayerData>();
-        currentPlayer.LoadFromData(data.lastPlayer, data.allPlayers[data.lastPlayer]);
+        if (data != null)
+        {
+            currentPlayer = this.gameObject.GetComponent<PlayerData>();
+            currentPlayer.LoadFromData(data.lastPlayer, data.allPlayers[data.lastPlayer]);
+        }            
     }
     
     public void Start()
@@ -50,7 +40,7 @@ public class GameManager : MonoBehaviour {
         return currentPlayer;
     }
 
-    internal Sprite[] GetPlayerSprites()
+    public Sprite[] GetPlayerSprites()
     {
         return new Sprite[] {
             eyesParts[currentPlayer.bodyComposition["eyes"]],
@@ -97,14 +87,14 @@ public class GameManager : MonoBehaviour {
 
     public bool CheckPlayerKey(string name)
     {
-        return data.PlayerExists(name);
+        return (data != null && data.PlayerExists(name));
     }
 
-    internal void CreateNewPlayer(string newPlayerName)
+    public void CreateNewPlayer(string newPlayerName)
     {
-        // Creates mock object to house new PlayerData.
-        GameObject newPlayer = new GameObject(newPlayerName);
-        PlayerData newPlayerData = newPlayer.AddComponent<PlayerData>();
+        // Replaces old PlayerData.
+        Destroy(this.GetComponent<PlayerData>());
+        PlayerData newPlayerData = this.gameObject.AddComponent<PlayerData>();
 
         // Randomizes values for new Player.
         newPlayerData.playerName = newPlayerName;
@@ -115,8 +105,16 @@ public class GameManager : MonoBehaviour {
         newPlayerData.bodyComposition["legs"] = Random.Range(0, legsParts.Length);
 
         // Saves data, replaces current player and deletes mock object.
-        DataManager.SavePlayerData(newPlayerData, data.allPlayers);
+        Dictionary<string, Dictionary<string, int>> playerBase = (data == null)
+                ? new Dictionary<string, Dictionary<string, int>>()
+                : data.allPlayers;
+
+        DataManager.SavePlayerData(newPlayerData, playerBase);
         currentPlayer = newPlayerData;
-        Destroy(newPlayer);
+    }
+
+    public List<string> GetPlayerNames()
+    {
+        return data.allPlayers.Keys.ToList();
     }
 }

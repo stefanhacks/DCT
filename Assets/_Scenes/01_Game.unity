@@ -1173,7 +1173,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 104606852}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -3716,7 +3716,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Option A
+  m_Text: Select Player
 --- !u!222 &522208513
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6659,11 +6659,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2017223836}
-        m_MethodName: TogglePopPanel
-        m_Mode: 2
+        m_MethodName: ToggleNewPlayerDialog
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 372714023}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7474,11 +7474,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2017223836}
-        m_MethodName: ToggleNewPlayerPanel
-        m_Mode: 2
+        m_MethodName: ToggleNewPlayerDialog
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 372714023}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8949,11 +8949,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2017223836}
-        m_MethodName: TogglePopPanel
-        m_Mode: 2
+        m_MethodName: ToggleLoadPlayerDialog
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 357970078}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9573,11 +9573,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2017223836}
-        m_MethodName: TogglePopPanel
-        m_Mode: 2
+        m_MethodName: ToggleLoadPlayerDialog
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 357970078}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -10344,6 +10344,8 @@ MonoBehaviour:
   dialogBoxDropdown: {fileID: 1842996553}
   nameInputField: {fileID: 1044838997}
   nameInputWarning: {fileID: 1786441487}
+  newPlayerDialog: {fileID: 372714023}
+  loadPlayerDialog: {fileID: 357970078}
 --- !u!4 &2017223837
 Transform:
   m_ObjectHideFlags: 0

@@ -8,12 +8,11 @@ public class GameMenuManager : MonoBehaviour {
     public Canvas gameMenu, popUps;
     public Dropdown dialogBoxDropdown;
     public InputField nameInputField;
-    public GameObject nameInputWarning;
+    public GameObject nameInputWarning, newPlayerDialog, loadPlayerDialog;
 
     private GameManager gmInstance;
 
     private GameObject characterArea;
-    private PlayerData currentPlayer;
     private Text nameField, scoreField;
 
     public void Start()
@@ -25,10 +24,16 @@ public class GameMenuManager : MonoBehaviour {
         scoreField = GameObject.FindGameObjectWithTag("PPScoreField").GetComponent<Text>();
 
         // Updates Fields based on the current player.
-        currentPlayer = gmInstance.GetCurrentPlayer();
-        nameField.text = currentPlayer.playerName;
-        scoreField.text = currentPlayer.highScore.ToString();
-        RefreshPlayerModel(gmInstance.GetPlayerSprites());
+        // If there are no players on base, force creating one.
+        if (gmInstance.GetCurrentPlayer() != null)
+        {
+            nameField.text = gmInstance.GetCurrentPlayer().playerName;
+            scoreField.text = gmInstance.GetCurrentPlayer().highScore.ToString();
+            RefreshPlayerModel(gmInstance.GetPlayerSprites());
+        } else
+        {
+            TogglePopPanel(newPlayerDialog);
+        }
     }
 
     public void RefreshPlayerModel(Sprite[] nextSprites)
@@ -48,9 +53,8 @@ public class GameMenuManager : MonoBehaviour {
 
     public void RefreshPlayer()
     {
-        currentPlayer = gmInstance.GetCurrentPlayer();
-        nameField.text = currentPlayer.playerName;
-        scoreField.text = currentPlayer.highScore.ToString();
+        nameField.text = gmInstance.GetCurrentPlayer().playerName;
+        scoreField.text = gmInstance.GetCurrentPlayer().highScore.ToString();
         RefreshPlayerModel(gmInstance.GetPlayerSprites());
     }
 
@@ -59,17 +63,39 @@ public class GameMenuManager : MonoBehaviour {
         // Checks panel for it's current "active" status and flips it.
         bool newStatus = !panel.activeSelf;
 
-        // Graphic Raycasters also use this state to define their status.
+        // Graphic Raycasters also use this state to define theirs.
         panel.SetActive(newStatus);
         popUps.GetComponent<GraphicRaycaster>().enabled = newStatus;
         gameMenu.GetComponent<GraphicRaycaster>().enabled = !newStatus;
     }
 
-    public void ToggleNewPlayerPanel(GameObject panel)
+    public void ToggleNewPlayerDialog()
     {
-        // In the case for new player pop up, must clear input field.
-        nameInputField.text = "";
-        TogglePopPanel(panel);
+        // In the case for new player pop up, returns to title if 
+        // there's no current player (first time running the game)
+        // but if there is, then must clear input field.
+        if (gmInstance.GetCurrentPlayer() == null)
+        {
+            // TODO BETTER
+            UnityEngine.SceneManagement.SceneManager.LoadScene("00_TitleScene");
+        }
+        else
+        {
+            nameInputField.text = "";
+            TogglePopPanel(newPlayerDialog);
+        }
+    }
+
+    public void ToggleLoadPlayerDialog()
+    {
+        if (!loadPlayerDialog.activeSelf)
+        {
+            dialogBoxDropdown.ClearOptions();
+            dialogBoxDropdown.options.Insert(0, new Dropdown.OptionData("Select player"));
+            dialogBoxDropdown.AddOptions(gmInstance.GetPlayerNames());
+        }
+
+        TogglePopPanel(loadPlayerDialog);
     }
 
     public void SetPopUpGFXRaycaster(bool set)
@@ -101,7 +127,7 @@ public class GameMenuManager : MonoBehaviour {
             // Creates player and updates menu.
             gmInstance.CreateNewPlayer(nameInputField.text);
             RefreshPlayer();
-            ToggleNewPlayerPanel(panel);
+            ToggleNewPlayerDialog();
         }
     }
 }

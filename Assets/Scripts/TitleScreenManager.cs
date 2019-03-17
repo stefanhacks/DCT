@@ -16,22 +16,8 @@ public class TitleScreenManager : MonoBehaviour
             // Forces different BinaryFormatter path for iOS.
             System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
         #endif
-        
-        // If save file doesn't exist yet, must create it with a default player.
-        if (DataManager.LoadPlayers() == null)
-        {
-            GameObject emptyPlayer = new GameObject("emptyPlayer");
-            emptyPlayer.AddComponent<PlayerData>();
 
-            DataManager.SavePlayerData(
-                emptyPlayer.GetComponent<PlayerData>(), 
-                new Dictionary<string, Dictionary<string, int>>()
-                );
-
-            Destroy(emptyPlayer);
-        }
-
-        // Loads data object.
+        // Loads data object, may be null if first time running.
         data = DataManager.LoadPlayers();
         Invoke("ShowTitleMenu", 1);
     }
@@ -55,8 +41,10 @@ public class TitleScreenManager : MonoBehaviour
     // Sets high score screen.
     public void LoadHighScores()
     {
+        KeyValuePair<string, Dictionary<string, int>>[] highscores = new KeyValuePair<string, Dictionary<string, int>>[0];
+
         // Uses LINQ to sort the player data by highscore and get the top three.
-        KeyValuePair<string, Dictionary<string, int>>[] highscores = 
+        if (data != null)
             data.allPlayers.OrderByDescending(s => s.Value["highscore"]).Take(3).ToArray();
 
         // Sets up the actual text in menu.
