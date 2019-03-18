@@ -25,5 +25,4 @@ public class PlayerData : MonoBehaviour {
         this.bodyComposition["torso"] = features["torso"];
         this.bodyComposition["legs"] = features["legs"];
     }
-
 }

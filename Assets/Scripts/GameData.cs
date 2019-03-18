@@ -35,6 +35,9 @@ public class GameData {
 
     internal bool PlayerExists(string name)
     {
-        return allPlayers.Keys.Where(n => n.ToLower() == name.ToLower()).Count() != 0;
+        if (allPlayers == null)
+            return false;
+        else 
+            return allPlayers.Keys.Where(n => n.ToLower() == name.ToLower()).Count() != 0;
     }
 }

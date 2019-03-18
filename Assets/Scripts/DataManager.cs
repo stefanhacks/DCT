@@ -36,4 +36,13 @@ public static class DataManager {
         stream.Close();
         return data;
     }
+
+    public static void DeleteSaveFile()
+    {
+        // Creates path to file.
+        string dataPath = Application.persistentDataPath + "/players.dct";
+
+        // If save file exists yet, delete it.
+        if (File.Exists(dataPath)) File.Delete(dataPath);
+    }
 }

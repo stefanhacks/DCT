@@ -8,7 +8,7 @@ public class GameMenuManager : MonoBehaviour {
     public Canvas gameMenu, popUps;
     public Dropdown dialogBoxDropdown;
     public InputField nameInputField;
-    public GameObject nameInputWarning, newPlayerDialog, loadPlayerDialog;
+    public GameObject newPlayerDialog, nameInputWarning, loadPlayerDialog, loadPlayerWarning, deletePlayerDialog;
 
     private GameManager gmInstance;
 
@@ -82,6 +82,7 @@ public class GameMenuManager : MonoBehaviour {
         else
         {
             nameInputField.text = "";
+            nameInputWarning.SetActive(false);
             TogglePopPanel(newPlayerDialog);
         }
     }
@@ -93,6 +94,7 @@ public class GameMenuManager : MonoBehaviour {
             dialogBoxDropdown.ClearOptions();
             dialogBoxDropdown.options.Insert(0, new Dropdown.OptionData("Select player"));
             dialogBoxDropdown.AddOptions(gmInstance.GetPlayerNames());
+            loadPlayerWarning.SetActive(false);
         }
 
         TogglePopPanel(loadPlayerDialog);
@@ -116,7 +118,7 @@ public class GameMenuManager : MonoBehaviour {
         else inputText.color = new Color(0.2f, 0.2f, 0.2f);
     }
 
-    public void MakeNewPlayer(GameObject panel)
+    public void MakeNewPlayer()
     {
         // If player already exists but user tried to create it even so, call warning box.
         if (gmInstance.CheckPlayerKey(nameInputField.text))
@@ -129,5 +131,31 @@ public class GameMenuManager : MonoBehaviour {
             RefreshPlayer();
             ToggleNewPlayerDialog();
         }
+    }
+
+    public void LoadPlayer()
+    {
+        // Checks if value selected differs from initial one.
+        if (dialogBoxDropdown.value == 0)
+        {
+            loadPlayerWarning.SetActive(true);
+        } else
+        {
+            // Load selected player.
+            gmInstance.LoadPlayerWithKey(dialogBoxDropdown.captionText.text);
+            RefreshPlayer();
+            ToggleLoadPlayerDialog();
+        }
+    }
+
+    public void DeletePlayer()
+    {
+        gmInstance.DeleteCurrentPlayer();
+        TogglePopPanel(deletePlayerDialog);
+
+        if (gmInstance.GetCurrentPlayer() != null)
+            RefreshPlayer();
+        else
+            TogglePopPanel(newPlayerDialog);
     }
 }
