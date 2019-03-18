@@ -4,8 +4,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-[RequireComponent(typeof(GameMenuManager), typeof(PlayerData))]
-public class GameManager : MonoBehaviour {
+public class CharacterManager : MonoBehaviour {
 
     public Sprite[] eyesParts, headParts, mouthParts, torsoParts, legsParts;
     public Dictionary<string, Sprite[]> areaToArray;
@@ -164,4 +163,6 @@ public class GameManager : MonoBehaviour {
             currentPlayer = null;
         }
     }
+
+
 }

@@ -10,26 +10,26 @@ public class GameMenuManager : MonoBehaviour {
     public InputField nameInputField;
     public GameObject newPlayerDialog, nameInputWarning, loadPlayerDialog, loadPlayerWarning, deletePlayerDialog;
 
-    private GameManager gmInstance;
+    private CharacterManager cmInstance;
 
     private GameObject characterArea;
     private Text nameField, scoreField;
 
     public void Start()
     {
-        // Runs after Awake, letting GameManager parent load everything first.
-        gmInstance = this.gameObject.GetComponent<GameManager>();
+        // Runs after Awake, letting Character Manager load everything first.
+        cmInstance = this.gameObject.GetComponent<CharacterManager>();
         characterArea = GameObject.FindGameObjectWithTag("CPCharacterArea");
         nameField = GameObject.FindGameObjectWithTag("PPNameField").GetComponent<Text>();
         scoreField = GameObject.FindGameObjectWithTag("PPScoreField").GetComponent<Text>();
 
         // Updates Fields based on the current player.
         // If there are no players on base, force creating one.
-        if (gmInstance.GetCurrentPlayer() != null)
+        if (cmInstance.GetCurrentPlayer() != null)
         {
-            nameField.text = gmInstance.GetCurrentPlayer().playerName;
-            scoreField.text = gmInstance.GetCurrentPlayer().highScore.ToString();
-            RefreshPlayerModel(gmInstance.GetPlayerSprites());
+            nameField.text = cmInstance.GetCurrentPlayer().playerName;
+            scoreField.text = cmInstance.GetCurrentPlayer().highScore.ToString();
+            RefreshPlayerModel(cmInstance.GetPlayerSprites());
         } else
         {
             TogglePopPanel(newPlayerDialog);
@@ -39,9 +39,9 @@ public class GameMenuManager : MonoBehaviour {
     public void RefreshPlayer()
     {
         // Loads all detail from the player to the appropriate fields.
-        nameField.text = gmInstance.GetCurrentPlayer().playerName;
-        scoreField.text = gmInstance.GetCurrentPlayer().highScore.ToString();
-        RefreshPlayerModel(gmInstance.GetPlayerSprites());
+        nameField.text = cmInstance.GetCurrentPlayer().playerName;
+        scoreField.text = cmInstance.GetCurrentPlayer().highScore.ToString();
+        RefreshPlayerModel(cmInstance.GetPlayerSprites());
     }
 
     public void RefreshPlayerModel(string area, Sprite nextSprite)
@@ -77,7 +77,7 @@ public class GameMenuManager : MonoBehaviour {
         // In the case for new player pop up, returns to title if 
         // there's no current player (first time running the game)
         // but if there is, then must clear input field.
-        if (gmInstance.GetCurrentPlayer() == null)
+        if (cmInstance.GetCurrentPlayer() == null)
         {
             // TODO BETTER
             UnityEngine.SceneManagement.SceneManager.LoadScene("00_TitleScene");
@@ -97,7 +97,7 @@ public class GameMenuManager : MonoBehaviour {
             // Creates dropdown list of options, but runs only when opening the menu.
             dialogBoxDropdown.ClearOptions();
             dialogBoxDropdown.options.Insert(0, new Dropdown.OptionData("Select player"));
-            dialogBoxDropdown.AddOptions(gmInstance.GetPlayerNames());
+            dialogBoxDropdown.AddOptions(cmInstance.GetPlayerNames());
             loadPlayerWarning.SetActive(false);
         }
 
@@ -120,20 +120,20 @@ public class GameMenuManager : MonoBehaviour {
         // Checks for possible collision with other player names and flags text red if so.
         Text inputText = nameInputField.transform.Find("Text").GetComponent<Text>();
 
-        if (gmInstance.CheckPlayerKey(nameInputField.text)) inputText.color = Color.red;
+        if (cmInstance.CheckPlayerKey(nameInputField.text)) inputText.color = Color.red;
         else inputText.color = new Color(0.2f, 0.2f, 0.2f);
     }
 
     public void MakeNewPlayer()
     {
         // If player already exists but user tried to create it even so, call warning box.
-        if (gmInstance.CheckPlayerKey(nameInputField.text))
+        if (cmInstance.CheckPlayerKey(nameInputField.text))
         {
             nameInputWarning.SetActive(true);
         } else if (nameInputField.text.Length > 0)
         {
             // If it doesn't, creates player and updates menu.
-            gmInstance.CreateNewPlayer(nameInputField.text);
+            cmInstance.CreateNewPlayer(nameInputField.text);
             RefreshPlayer();
             ToggleNewPlayerDialog();
         }
@@ -148,7 +148,7 @@ public class GameMenuManager : MonoBehaviour {
         } else
         {
             // If it is, loads selected player and updates everything.
-            gmInstance.LoadPlayerWithKey(dialogBoxDropdown.captionText.text);
+            cmInstance.LoadPlayerWithKey(dialogBoxDropdown.captionText.text);
             RefreshPlayer();
             ToggleLoadPlayerDialog();
         }
@@ -157,12 +157,12 @@ public class GameMenuManager : MonoBehaviour {
     public void DeletePlayer()
     {
         // Deletes current player selected and turns off pop up.
-        gmInstance.DeleteCurrentPlayer();
+        cmInstance.DeleteCurrentPlayer();
         TogglePopPanel(deletePlayerDialog);
 
-        // If Game Maker Instance was able to find another player to load, refresh.
+        // If Character Manager Instance was able to find another player to load, refresh.
         // If it wasn't, must force the creation of a new player.
-        if (gmInstance.GetCurrentPlayer() != null)
+        if (cmInstance.GetCurrentPlayer() != null)
             RefreshPlayer();
         else
             TogglePopPanel(newPlayerDialog);
