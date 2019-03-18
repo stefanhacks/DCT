@@ -36,6 +36,21 @@ public class GameMenuManager : MonoBehaviour {
         }
     }
 
+    public void RefreshPlayer()
+    {
+        // Loads all detail from the player to the appropriate fields.
+        nameField.text = gmInstance.GetCurrentPlayer().playerName;
+        scoreField.text = gmInstance.GetCurrentPlayer().highScore.ToString();
+        RefreshPlayerModel(gmInstance.GetPlayerSprites());
+    }
+
+    public void RefreshPlayerModel(string area, Sprite nextSprite)
+    {
+        // Finds the game object that has the sprite to be changed and alters it.
+        GameObject areaToRefresh = characterArea.transform.Find(area).gameObject;
+        areaToRefresh.GetComponent<SpriteRenderer>().sprite = nextSprite;
+    }
+
     public void RefreshPlayerModel(Sprite[] nextSprites)
     {
         RefreshPlayerModel("eyes", nextSprites[0]);
@@ -45,21 +60,9 @@ public class GameMenuManager : MonoBehaviour {
         RefreshPlayerModel("legs", nextSprites[4]);
     }
 
-    public void RefreshPlayerModel(string area, Sprite nextSprite)
-    {
-        GameObject areaToRefresh = characterArea.transform.Find(area).gameObject;
-        areaToRefresh.GetComponent<SpriteRenderer>().sprite = nextSprite;
-    }
-
-    public void RefreshPlayer()
-    {
-        nameField.text = gmInstance.GetCurrentPlayer().playerName;
-        scoreField.text = gmInstance.GetCurrentPlayer().highScore.ToString();
-        RefreshPlayerModel(gmInstance.GetPlayerSprites());
-    }
-
     public void TogglePopPanel(GameObject panel)
     {
+        // Generic function for togling pop up panels.
         // Checks panel for it's current "active" status and flips it.
         bool newStatus = !panel.activeSelf;
 
@@ -91,6 +94,7 @@ public class GameMenuManager : MonoBehaviour {
     {
         if (!loadPlayerDialog.activeSelf)
         {
+            // Creates dropdown list of options, but runs only when opening the menu.
             dialogBoxDropdown.ClearOptions();
             dialogBoxDropdown.options.Insert(0, new Dropdown.OptionData("Select player"));
             dialogBoxDropdown.AddOptions(gmInstance.GetPlayerNames());
@@ -108,7 +112,9 @@ public class GameMenuManager : MonoBehaviour {
 
     public void CheckForExistingName()
     {
-        // Toggles warning off if it exists.
+        // Function that runs during typing a new player name.
+        // Toggles warning off if it exists, meaning that if player tried
+        // submitting an existing player name and failed, it's trying again.
         if (nameInputWarning.activeSelf) nameInputWarning.SetActive(false);
 
         // Checks for possible collision with other player names and flags text red if so.
@@ -126,7 +132,7 @@ public class GameMenuManager : MonoBehaviour {
             nameInputWarning.SetActive(true);
         } else if (nameInputField.text.Length > 0)
         {
-            // Creates player and updates menu.
+            // If it doesn't, creates player and updates menu.
             gmInstance.CreateNewPlayer(nameInputField.text);
             RefreshPlayer();
             ToggleNewPlayerDialog();
@@ -135,13 +141,13 @@ public class GameMenuManager : MonoBehaviour {
 
     public void LoadPlayer()
     {
-        // Checks if value selected differs from initial one.
+        // Checks if value selected on dropdown differs from initial label one.
         if (dialogBoxDropdown.value == 0)
         {
             loadPlayerWarning.SetActive(true);
         } else
         {
-            // Load selected player.
+            // If it is, loads selected player and updates everything.
             gmInstance.LoadPlayerWithKey(dialogBoxDropdown.captionText.text);
             RefreshPlayer();
             ToggleLoadPlayerDialog();
@@ -150,9 +156,12 @@ public class GameMenuManager : MonoBehaviour {
 
     public void DeletePlayer()
     {
+        // Deletes current player selected and turns off pop up.
         gmInstance.DeleteCurrentPlayer();
         TogglePopPanel(deletePlayerDialog);
 
+        // If Game Maker Instance was able to find another player to load, refresh.
+        // If it wasn't, must force the creation of a new player.
         if (gmInstance.GetCurrentPlayer() != null)
             RefreshPlayer();
         else

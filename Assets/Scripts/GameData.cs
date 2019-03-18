@@ -5,6 +5,13 @@ using System.Linq;
 using System;
 
 // Class used for storing and serializing saved players from the game.
+
+// Decided to save players as a single dictionary instead of in different
+// objects, which could have resulted in several different save files.
+// In the case for a more complex game, with more data regarding each
+// player this would be preferable and safer - for the case of save data corruption, 
+// for instance. In this instance , however, it does allow me to ignore things such as 
+// finding specific save files and figuring how many there are in the folder.
 [System.Serializable]
 public class GameData {
     public Dictionary<string, Dictionary<string, int>> allPlayers;
@@ -12,7 +19,7 @@ public class GameData {
 
     public GameData(PlayerData currentPlayer, Dictionary<string, Dictionary<string, int>> playerBase)
     {
-        // Updates playerBase dict, for players that might have been deleted.
+        // Updates playerBase dict, for players that might have been deleted or created.
         allPlayers = playerBase;
 
         // Updates current player data.
@@ -35,6 +42,7 @@ public class GameData {
 
     internal bool PlayerExists(string name)
     {
+        // Returns if provided name string is a key in the dictionary. Also checks if it exists.
         if (allPlayers == null)
             return false;
         else 

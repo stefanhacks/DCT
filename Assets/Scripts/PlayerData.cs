@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Class used for using data from a specific player.
+// Class used for storiing data from a specific player and referencing it.
 public class PlayerData : MonoBehaviour {
 
     [HideInInspector]

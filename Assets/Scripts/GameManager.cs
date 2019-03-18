@@ -36,6 +36,11 @@ public class GameManager : MonoBehaviour {
         };
     }
 
+    public void SetCurrentPlayer(PlayerData newPlayer)
+    {
+        currentPlayer = newPlayer;
+    }
+
     public PlayerData GetCurrentPlayer()
     {
         return currentPlayer;
@@ -52,9 +57,28 @@ public class GameManager : MonoBehaviour {
         };
     }
     
-    public void SetCurrentPlayer(PlayerData newPlayer)
+    private void ChangePart(string part, bool next)
     {
-        currentPlayer = newPlayer;
+        // Functions for customizing player appearance.
+        // First finds current selected part.
+        int currentPart = currentPlayer.bodyComposition[part.ToString()];
+        int nextPart;
+
+        // Logic that adds or reduces it's index based on request, but
+        // also clamps the value to a minimum of 0 and maximum of array length.
+        if (currentPart + 1 >= areaToArray[part].Length && next)
+            nextPart = 0;
+        else if (currentPart == 0 && !next)
+            nextPart = areaToArray[part].Length - 1;
+        else
+            nextPart = (next) ? ++currentPart : --currentPart;
+
+        // Refreshes and saves everything.
+        currentPlayer.bodyComposition[part.ToString()] = nextPart;
+        Sprite nextSprite = areaToArray[part][nextPart];
+
+        this.GetComponent<GameMenuManager>().RefreshPlayerModel(part, nextSprite);
+        DataManager.SavePlayerData(currentPlayer, data.allPlayers);
     }
 
     public void ChangePartNext(string part)
@@ -67,37 +91,26 @@ public class GameManager : MonoBehaviour {
         this.ChangePart(part, false);
     }
 
-    private void ChangePart(string part, bool next)
-    {
-        int currentPart = currentPlayer.bodyComposition[part.ToString()];
-        int nextPart;
-
-        if (currentPart + 1 >= areaToArray[part].Length && next)
-            nextPart = 0;
-        else if (currentPart == 0 && !next)
-            nextPart = areaToArray[part].Length - 1;
-        else
-            nextPart = (next) ? ++currentPart : --currentPart;
-
-        currentPlayer.bodyComposition[part.ToString()] = nextPart;
-        Sprite nextSprite = areaToArray[part][nextPart];
-
-        this.GetComponent<GameMenuManager>().RefreshPlayerModel(part, nextSprite);
-        DataManager.SavePlayerData(currentPlayer, data.allPlayers);
-    }
-
     public bool CheckPlayerKey(string name)
     {
+        // Returns if key exists.
         return (data != null && data.PlayerExists(name));
+    }
+
+    public List<string> GetPlayerNames()
+    {
+        // Returns player all keys.
+        return data.allPlayers.Keys.ToList();
     }
 
     public void CreateNewPlayer(string newPlayerName)
     {
-        // Replaces old PlayerData.
+        // Function for Player creation. 
+        // First replaces old PlayerData.
         Destroy(this.GetComponent<PlayerData>());
         PlayerData newPlayerData = this.gameObject.AddComponent<PlayerData>();
 
-        // Randomizes values for new Player.
+        // Randomizes values for the new Player.
         newPlayerData.playerName = newPlayerName;
         newPlayerData.bodyComposition["eyes"] = UnityEngine.Random.Range(0, eyesParts.Length);
         newPlayerData.bodyComposition["head"] = UnityEngine.Random.Range(0, headParts.Length);
@@ -105,7 +118,8 @@ public class GameManager : MonoBehaviour {
         newPlayerData.bodyComposition["torso"] = UnityEngine.Random.Range(0, torsoParts.Length);
         newPlayerData.bodyComposition["legs"] = UnityEngine.Random.Range(0, legsParts.Length);
 
-        // Saves data, replaces current player and deletes mock object.
+        // Saves data and replaces current player.
+        // Following verification is only for the case there is no player base yet. 
         Dictionary<string, Dictionary<string, int>> playerBase = (data == null)
                 ? new Dictionary<string, Dictionary<string, int>>()
                 : data.allPlayers;
@@ -115,18 +129,13 @@ public class GameManager : MonoBehaviour {
         data = DataManager.LoadPlayers();
     }
 
-    public List<string> GetPlayerNames()
-    {
-        return data.allPlayers.Keys.ToList();
-    }
-
     public void LoadPlayerWithKey(string playerKey)
     {
         // Replace old PlayerData.
         Destroy(this.GetComponent<PlayerData>());
         PlayerData newPlayerData = this.gameObject.AddComponent<PlayerData>();
 
-        // Loads values.
+        // Loads values, based on player key sent.
         newPlayerData.LoadFromData(playerKey, data.allPlayers[playerKey]);
         currentPlayer = newPlayerData;
     }
