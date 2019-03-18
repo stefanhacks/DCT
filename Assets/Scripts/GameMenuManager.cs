@@ -5,23 +5,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GameMenuManager : MonoBehaviour {
-    public Canvas gameMenu, popUps;
+    public Canvas gameMenu, popUps, inGameHUD;
+    public Text nameField, scoreField;
     public Dropdown dialogBoxDropdown;
     public InputField nameInputField;
-    public GameObject newPlayerDialog, nameInputWarning, loadPlayerDialog, loadPlayerWarning, deletePlayerDialog;
+    public GameObject characterArea, newPlayerDialog, nameInputWarning, loadPlayerDialog, loadPlayerWarning, deletePlayerDialog;
+
 
     private CharacterManager cmInstance;
-
-    private GameObject characterArea;
-    private Text nameField, scoreField;
-
+    
     public void Start()
     {
         // Runs after Awake, letting Character Manager load everything first.
         cmInstance = this.gameObject.GetComponent<CharacterManager>();
-        characterArea = GameObject.FindGameObjectWithTag("CPCharacterArea");
-        nameField = GameObject.FindGameObjectWithTag("PPNameField").GetComponent<Text>();
-        scoreField = GameObject.FindGameObjectWithTag("PPScoreField").GetComponent<Text>();
 
         // Updates Fields based on the current player.
         // If there are no players on base, force creating one.
@@ -166,5 +162,14 @@ public class GameMenuManager : MonoBehaviour {
             RefreshPlayer();
         else
             TogglePopPanel(newPlayerDialog);
+    }
+
+    public void ToggleHUD()
+    {
+        // Hides Game Menu, brings up HUD.
+        bool newStatus = !inGameHUD.enabled;
+
+        inGameHUD.enabled = newStatus;
+        gameMenu.enabled = !newStatus;
     }
 }

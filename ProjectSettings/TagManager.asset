@@ -7,6 +7,7 @@ TagManager:
   - PPNameField
   - PPScoreField
   - CPCharacterArea
+  - PlayerRoot
   layers:
   - Default
   - TransparentFX
@@ -46,6 +47,9 @@ TagManager:
     locked: 0
   - name: GameMenu
     uniqueID: 158032511
+    locked: 0
+  - name: InGameHUD
+    uniqueID: 149642891
     locked: 0
   - name: PopUps
     uniqueID: 2450412767
