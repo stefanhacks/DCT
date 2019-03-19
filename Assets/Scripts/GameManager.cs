@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
 
     [Header("GameManager Variables and Object References")]
     public GameObject playerObject;
-    public GameObject spawnPoint;
+    public GameObject groundObject, spawnPoint;
     public GameObject[] obstaclePrefabs;
 
     private int gamePoints, obstacleCount, currentDifficulty;
@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour {
     private PlayerData currentPlayer;
     private PlayerPawn playerPawn;
     private Vector3 originalPlayerPosition;
+    private Quaternion originalGroundRotation;
     private GameMenuManager mManagerInstance;
     
     private GameState currentState;
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour {
         mManagerInstance = this.GetComponent<GameMenuManager>();
         playerPawn = playerObject.GetComponent<PlayerPawn>();
         originalPlayerPosition = playerPawn.transform.position;
+        originalGroundRotation = groundObject.transform.rotation;
     }
 
     private void Update()
@@ -80,6 +82,21 @@ public class GameManager : MonoBehaviour {
             default:
                 break;
         }
+    }
+
+    public void StartGame(PlayerData player, Sprite[] playerSprites)
+    {
+        PrepareGame(playerSprites);
+        currentPlayer = player;
+    }
+
+    public void PauseGame()
+    {
+        // Pausing stuff;
+        Time.timeScale = 0;
+        playerObject.SetActive(false);
+        spawnPoint.SetActive(false);
+        currentState = GameState.Paused;
     }
 
     private void PrepareGame(Sprite[] playerSprites)
@@ -137,10 +154,8 @@ public class GameManager : MonoBehaviour {
                 case 2:
                     Instantiate(obstaclePrefabs[1], spawnPoint.transform);
                     break;
-                case 3:
-                    Instantiate(obstaclePrefabs[2], spawnPoint.transform);
-                    break;
                 default:
+                    Instantiate(obstaclePrefabs[2], spawnPoint.transform);
                     break;
             }
             
@@ -209,24 +224,13 @@ public class GameManager : MonoBehaviour {
 
     private void UpdatePlayArea()
     {
-        // TODO
+        float rotationTotal = playingDuration / (difficultyRamp * 5);
+        groundObject.transform.rotation = Quaternion.Lerp(
+            originalGroundRotation,
+            Quaternion.AngleAxis(30, Vector3.forward),
+            rotationTotal);
     }
-
-    public void StartGame(PlayerData player, Sprite[] playerSprites)
-    {
-        PrepareGame(playerSprites);
-        currentPlayer = player;
-    }
-
-    public void PauseGame()
-    {
-        // Pausing stuff;
-        Time.timeScale = 0;
-        playerObject.SetActive(false);
-        spawnPoint.SetActive(false);
-        currentState = GameState.Paused;
-    }
-    
+        
     public void ObstacleDodged(int pointsValue)
     {
         gamePoints += pointsValue;

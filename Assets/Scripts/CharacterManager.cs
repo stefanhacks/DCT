@@ -90,18 +90,6 @@ public class CharacterManager : MonoBehaviour {
         this.ChangePart(part, false);
     }
 
-    public bool CheckPlayerKey(string name)
-    {
-        // Returns if key exists.
-        return (data != null && data.PlayerExists(name));
-    }
-
-    public List<string> GetPlayerNames()
-    {
-        // Returns player all keys.
-        return data.allPlayers.Keys.ToList();
-    }
-
     public void CreateNewPlayer(string newPlayerName)
     {
         // Function for Player creation. 
@@ -162,6 +150,18 @@ public class CharacterManager : MonoBehaviour {
             data = null;
             currentPlayer = null;
         }
+    }
+
+    public List<string> GetPlayerNames()
+    {
+        // Returns player all keys.
+        return data.allPlayers.Keys.ToList();
+    }
+
+    public bool CheckPlayerKey(string name)
+    {
+        // Returns if key exists.
+        return (data != null && data.PlayerExists(name));
     }
 
     internal KeyValuePair<string, Dictionary<string, int>>[] GetHighScores()

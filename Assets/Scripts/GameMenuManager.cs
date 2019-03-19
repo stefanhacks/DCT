@@ -111,24 +111,33 @@ public class GameMenuManager : MonoBehaviour {
         TogglePopPanel(loadPlayerDialog);
     }
 
-    public void SetPopUpGFXRaycaster(bool set)
+    public void ToggleGameHUD()
     {
-        // Used to make sure load player popup is inactive during dropdown. 
-        popUps.GetComponent<GraphicRaycaster>().enabled = set;
+        // Toggles between Game Menu and HUD.
+        bool newStatus = !inGameHUD.activeSelf;
+
+        inGameHUD.SetActive(newStatus);
+        gameMenu.SetActive(!newStatus);
     }
 
-    public void CheckForExistingName()
+    public void TogglePauseMenu()
     {
-        // Function that runs during typing a new player name.
-        // Toggles warning off if it exists, meaning that if player tried
-        // submitting an existing player name and failed, it's trying again.
-        if (nameInputWarning.activeSelf) nameInputWarning.SetActive(false);
+        // Toggles between both HUD and New/Load/Delete player, and Game Menu.
+        changePlayerMenu.SetActive(!inGameHUD.activeSelf);
+        ToggleGameHUD();
+    }
 
-        // Checks for possible collision with other player names and flags text red if so.
-        Text inputText = nameInputField.transform.Find("Text").GetComponent<Text>();
+    public void ToggleGameOverPanel()
+    {
+        // Toggles between HUD and GameOver Dialog.
+        bool newStatus = !inGameHUD.activeSelf;
 
-        if (cmInstance.CheckPlayerKey(nameInputField.text)) inputText.color = Color.red;
-        else inputText.color = new Color(0.2f, 0.2f, 0.2f);
+        // Graphic Raycaster also use this state to define theirs.
+        inGameHUD.SetActive(newStatus);
+        gameOverDialog.SetActive(!newStatus);
+        popUps.GetComponent<GraphicRaycaster>().enabled = !newStatus;
+
+        UpdateHighScores();
     }
 
     public void MakeNewPlayer()
@@ -175,54 +184,6 @@ public class GameMenuManager : MonoBehaviour {
             TogglePopPanel(newPlayerDialog);
     }
 
-    public void ToggleGameHUD()
-    {
-        // Toggles between Game Menu and HUD.
-        bool newStatus = !inGameHUD.activeSelf;
-
-        inGameHUD.SetActive(newStatus);
-        gameMenu.SetActive(!newStatus);
-    }
-
-    public void TogglePauseMenu()
-    {
-        // Toggles between both HUD and New/Load/Delete player, and Game Menu.
-        changePlayerMenu.SetActive(!inGameHUD.activeSelf);
-        ToggleGameHUD();
-    }
-
-    public void ToggleGameOverPanel()
-    {
-        // Toggles between HUD and GameOver Dialog.
-        bool newStatus = !inGameHUD.activeSelf;
-
-        inGameHUD.SetActive(newStatus);
-        gameOverDialog.SetActive(!newStatus);
-        
-        // Graphic Raycaster also use this state to define theirs.
-        popUps.GetComponent<GraphicRaycaster>().enabled = !newStatus;
-
-        // Gets Highscores
-        KeyValuePair<string, Dictionary<string, int>>[] highscores = cmInstance.GetHighScores();
-
-        // Sets up the actual text in menu.
-        scoreNames.text = "";
-        scorePoints.text = "";
-        for (int i = 0; i < 3; i++)
-        {
-            if (i < highscores.Length)
-            {
-                scoreNames.text += highscores[i].Key + "\n";
-                scorePoints.text += highscores[i].Value["highscore"] + "\n";
-            }
-            else
-            {
-                scoreNames.text += "-\n";
-                scorePoints.text += "-\n";
-            }
-        }
-    }
-
     public void PlayButton()
     {
         gameOverDialog.SetActive(false);
@@ -245,8 +206,51 @@ public class GameMenuManager : MonoBehaviour {
         TogglePopPanel(gameOverDialog);
     }
 
+    public void SetPopUpGFXRaycaster(bool set)
+    {
+        // Used to make sure load player popup is inactive during dropdown. 
+        popUps.GetComponent<GraphicRaycaster>().enabled = set;
+    }
+
+    public void CheckForExistingName()
+    {
+        // Function that runs during typing a new player name.
+        // Toggles warning off if it exists, meaning that if player tried
+        // submitting an existing player name and failed, it's trying again.
+        if (nameInputWarning.activeSelf) nameInputWarning.SetActive(false);
+
+        // Checks for possible collision with other player names and flags text red if so.
+        Text inputText = nameInputField.transform.Find("Text").GetComponent<Text>();
+
+        if (cmInstance.CheckPlayerKey(nameInputField.text)) inputText.color = Color.red;
+        else inputText.color = new Color(0.2f, 0.2f, 0.2f);
+    }
+
     public void UpdateScore(int gamePoints)
     {
         ingameScoreField.text = gamePoints.ToString();
+    }
+
+    public void UpdateHighScores()
+    {
+        // Gets Highscores
+        KeyValuePair<string, Dictionary<string, int>>[] highscores = cmInstance.GetHighScores();
+
+        // Sets up the actual text in menu.
+        scoreNames.text = "";
+        scorePoints.text = "";
+        for (int i = 0; i < 3; i++)
+        {
+            if (i < highscores.Length)
+            {
+                scoreNames.text += highscores[i].Key + "\n";
+                scorePoints.text += highscores[i].Value["highscore"] + "\n";
+            }
+            else
+            {
+                scoreNames.text += "-\n";
+                scorePoints.text += "-\n";
+            }
+        }
     }
 }

@@ -2512,7 +2512,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 207177127}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20, y: 0, z: -5}
+  m_LocalPosition: {x: 20, y: -0.6, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 474522915}
@@ -3987,7 +3987,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 474522914}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.5, y: -3, z: 0}
+  m_LocalPosition: {x: -6.72, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 24421093}
@@ -14072,6 +14072,7 @@ MonoBehaviour:
   difficultyRamp: 10
   jumpForce: 80
   playerObject: {fileID: 1430158917}
+  groundObject: {fileID: 474522914}
   spawnPoint: {fileID: 207177127}
   obstaclePrefabs:
   - {fileID: 1836539240978742, guid: 53d6c25ebf66f6744ade6eba425b9577, type: 2}
