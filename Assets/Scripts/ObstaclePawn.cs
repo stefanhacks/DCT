@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObstacleScript : MonoBehaviour {
+public class ObstaclePawn : MonoBehaviour {
 
     [Tooltip("Points awarded for dodging the obstacle.")]
     [Range(1,3)]

@@ -41,11 +41,9 @@ public class TitleScreenManager : MonoBehaviour
     // Sets high score screen.
     public void LoadHighScores()
     {
-        KeyValuePair<string, Dictionary<string, int>>[] highscores = new KeyValuePair<string, Dictionary<string, int>>[0];
-
-        // Uses LINQ to sort the player data by highscore and get the top three.
-        if (data != null)
-            data.allPlayers.OrderByDescending(s => s.Value["highscore"]).Take(3).ToArray();
+        KeyValuePair<string, Dictionary<string, int>>[] highscores = (data == null)
+            ? new KeyValuePair<string, Dictionary<string, int>>[0]
+            : data.GiveHighScores();
 
         // Sets up the actual text in menu.
         scoreNames.text = "";

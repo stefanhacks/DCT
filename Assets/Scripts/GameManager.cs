@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // Adds all dependencies.
 [RequireComponent(typeof(CharacterManager), typeof(GameMenuManager), typeof(PlayerData))]
@@ -38,18 +39,17 @@ public class GameManager : MonoBehaviour {
     private float playingDuration, innerTimer, currentSpawnInterval;
 
     private PlayerData currentPlayer;
-    private PlayerScript playerScript;
-    private CharacterManager cmInstance;
+    private PlayerPawn playerPawn;
+    private Vector3 originalPlayerPosition;
     private GameMenuManager mManagerInstance;
-
-    // TODO: Set to private
+    
     private GameState currentState;
-    private enum GameState {GameMenu, Prepare, Playing, Paused, GameOver};
+    private enum GameState {GameMenu, Playing, Paused, GameOver};
 
 	void Start () {
-        cmInstance = this.GetComponent<CharacterManager>();
         mManagerInstance = this.GetComponent<GameMenuManager>();
-        playerScript = playerObject.GetComponent<PlayerScript>();
+        playerPawn = playerObject.GetComponent<PlayerPawn>();
+        originalPlayerPosition = playerPawn.transform.position;
     }
 
     private void Update()
@@ -59,22 +59,18 @@ public class GameManager : MonoBehaviour {
             case GameState.GameMenu:
                 // During player alteration. Changes on "Play".
                 break;
-            case GameState.Prepare:
-                // After play is hit, changes to playing after everything runs once
-                this.PrepareGame();
-                currentState = GameState.Playing;
-                break;
             case GameState.Playing:
                 // Core game loop.
                 this.UpdateHUD();
-                this.DoGameLoop();
+                this.UpdatePlayArea();
+                this.DoSpawning();
                 this.CheckPlayerInput();
                 this.CheckGameOver();
                 break;
             case GameState.Paused:
                 // Able to happen during Playing.
                 // Opens up customization menu.
-                // Cannot go to any other state but Playing.
+                // Goes back to Playing once toggled off.
                 break;
             case GameState.GameOver:
                 // Shows points made.
@@ -86,28 +82,37 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private void PrepareGame()
+    private void PrepareGame(Sprite[] playerSprites)
     {
-        // Must alter player object, setting appearance.
-        RefreshPlayerObject(cmInstance.GetPlayerSprites());
-        currentPlayer = cmInstance.GetCurrentPlayer();
+        // Must alter player object and activate spawn point.
+        RefreshPlayerObject(playerSprites);
         playerObject.SetActive(true);
+        spawnPoint.SetActive(true);
 
-        // Must activate proper game hud.
-        mManagerInstance.ToggleGameHUD();
+        // If previous game state was "Paused", needs to reset timeScale.
+        // If it wasn't, needs to reset all relevant gameplay variables.
+        if (currentState == GameState.Paused)
+        {
+            Time.timeScale = 1;
+        } else
+        {
+            // Reset game variables.
+            currentDifficulty = 0;
+            playingDuration = 0;
+            gamePoints = 0;
+            obstacleCount = 0;
+            currentSpawnInterval = initialSpawnInterval;
 
-        // Reset game variables.
-        currentDifficulty = 0;
-        playingDuration = 0;
-        gamePoints = 0;
-        obstacleCount = 0;
-        currentSpawnInterval = initialSpawnInterval;
+            // Reset Player.
+            playerPawn.SetWasHit(false);
+            playerObject.transform.position = originalPlayerPosition;
+        }
 
-        // Reset Player.
-        playerScript.SetWasHit(false);
+        // Change state.
+        currentState = GameState.Playing;
     }
     
-    private void DoGameLoop()
+    private void DoSpawning()
     {
         // Applies frame interval to timers.
         playingDuration += Time.deltaTime;
@@ -156,19 +161,32 @@ public class GameManager : MonoBehaviour {
         // to avoid input loss, not being a continuous button press check.
         if (Input.GetButtonDown("Jump"))
         {
-            playerScript.TryJump(new Vector2(0, jumpForce));
-        } else if (Input.GetButton("Cancel"))
+            playerPawn.TryJump(new Vector2(0, jumpForce));
+        }
+        // Since mouse play is enabled, checks if UI is being clicked.
+        // If it is, player is pausing the game, so don't jump.
+        else if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            PauseButton();
+            playerPawn.TryJump(new Vector2(0, jumpForce));
+        }
+        else if (Input.GetButton("Cancel"))
+        {
+            mManagerInstance.PauseGameButton();
         }
     }
 
     private void CheckGameOver()
     {
-        if (playerScript.GetWasHit())
+        if (!playerPawn.GetWasHit()) return;
+
+        if (gamePoints > currentPlayer.GetComponent<PlayerData>().highScore)
         {
-            currentState = GameState.GameOver;
+            currentPlayer.GetComponent<PlayerData>().highScore = gamePoints;
+            DataManager.SavePlayerData(currentPlayer, DataManager.LoadPlayers().allPlayers);
         }
+
+        currentState = GameState.GameOver;
+        mManagerInstance.ToggleGameOverPanel();
     }
 
     private void RefreshPlayerObject(Sprite[] nextSprites)
@@ -185,14 +203,24 @@ public class GameManager : MonoBehaviour {
         mManagerInstance.UpdateScore(gamePoints);
     }
 
-    public void StartGame()
+    private void UpdatePlayArea()
     {
-        currentState = GameState.Prepare;
+        // TODO
     }
 
-    public void PauseButton()
+    public void StartGame(PlayerData player, Sprite[] playerSprites)
     {
-        Debug.Log("Paused");
+        PrepareGame(playerSprites);
+        currentPlayer = player;
+    }
+
+    public void PauseGame()
+    {
+        // Pausing stuff;
+        Time.timeScale = 0;
+        playerObject.SetActive(false);
+        spawnPoint.SetActive(false);
+        currentState = GameState.Paused;
     }
     
     public void ObstacleDodged(int pointsValue)

@@ -5,18 +5,30 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GameMenuManager : MonoBehaviour {
-    public GameObject gameMenu, popUps, inGameHUD;
-    public Text nameField, scoreField, ingameScoreField;
+    [Header("Menu Objects")]
+    public GameObject gameMenu;
+    public GameObject popUps, changePlayerMenu, inGameHUD;
+
+    [Header("Player Data fields")]
+    public Text nameField;
+    public Text scoreField, ingameScoreField;
     public Dropdown dialogBoxDropdown;
     public InputField nameInputField;
-    public GameObject characterArea, newPlayerDialog, nameInputWarning, loadPlayerDialog, loadPlayerWarning, deletePlayerDialog;
+    public GameObject characterArea;
+
+    [Header("Panels and Dialogs")]
+    public GameObject nameInputWarning;
+    public GameObject loadPlayerWarning, newPlayerDialog, loadPlayerDialog, deletePlayerDialog, gameOverDialog;
+    public Text scoreNames, scorePoints;
 
     private CharacterManager cmInstance;
+    private GameManager gmInstance;
     
     public void Start()
     {
         // Runs after Awake, letting Character Manager load everything first.
         cmInstance = this.gameObject.GetComponent<CharacterManager>();
+        gmInstance = this.gameObject.GetComponent<GameManager>();
 
         // Updates Fields based on the current player.
         // If there are no players on base, force creating one.
@@ -165,11 +177,62 @@ public class GameMenuManager : MonoBehaviour {
 
     public void ToggleGameHUD()
     {
-        // Hides Game Menu, brings up HUD.
+        // Toggles between Game Menu and HUD.
         bool newStatus = !inGameHUD.activeSelf;
 
         inGameHUD.SetActive(newStatus);
         gameMenu.SetActive(!newStatus);
+    }
+
+    public void TogglePauseMenu()
+    {
+        // Toggles between both HUD and New/Load/Delete player, and Game Menu.
+        changePlayerMenu.SetActive(!inGameHUD.activeSelf);
+        ToggleGameHUD();
+    }
+
+    public void ToggleGameOverPanel()
+    {
+        // Toggles between HUD and GameOver Dialog.
+        bool newStatus = !inGameHUD.activeSelf;
+
+        inGameHUD.SetActive(newStatus);
+        gameOverDialog.SetActive(!newStatus);
+        
+        // Graphic Raycaster also use this state to define theirs.
+        popUps.GetComponent<GraphicRaycaster>().enabled = newStatus;
+
+        // Gets Highscores
+        KeyValuePair<string, Dictionary<string, int>>[] highscores = cmInstance.GetHighScores();
+
+        // Sets up the actual text in menu.
+        scoreNames.text = "";
+        scorePoints.text = "";
+        for (int i = 0; i < 3; i++)
+        {
+            if (i < highscores.Length)
+            {
+                scoreNames.text += highscores[i].Key + "\n";
+                scorePoints.text += highscores[i].Value["highscore"] + "\n";
+            }
+            else
+            {
+                scoreNames.text += "-\n";
+                scorePoints.text += "-\n";
+            }
+        }
+    }
+
+    public void PlayButton()
+    {
+        gmInstance.StartGame(cmInstance.GetCurrentPlayer(), cmInstance.GetPlayerSprites());
+        ToggleGameHUD();
+    }
+
+    public void PauseGameButton()
+    {
+        gmInstance.PauseGame();
+        TogglePauseMenu();
     }
 
     public void UpdateScore(int gamePoints)

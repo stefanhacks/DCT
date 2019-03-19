@@ -48,4 +48,9 @@ public class GameData {
         else 
             return allPlayers.Keys.Where(n => n.ToLower() == name.ToLower()).Count() != 0;
     }
+
+    public KeyValuePair<string, Dictionary<string, int>>[] GiveHighScores()
+    {
+        return allPlayers.OrderByDescending(s => s.Value["highscore"]).Take(3).DefaultIfEmpty().ToArray();
+    }
 }

@@ -16,9 +16,9 @@ public class ObstacleLimiter : MonoBehaviour {
         // Simply acts a limit for the obstacles, deleting them.
         if (collision.tag == "Obstacle")
         {
-            GameObject obstacleObject = collision.gameObject;
-            Destroy(obstacleObject, 1);
-            gmInstance.ObstacleDodged(obstacleObject.GetComponent<ObstacleScript>().pointsAwarded);
+            ObstaclePawn obstaclePawn = collision.gameObject.GetComponent<ObstaclePawn>();
+            Destroy(collision.gameObject, 1);
+            gmInstance.ObstacleDodged(obstaclePawn.pointsAwarded);
         }   
     }
 }
