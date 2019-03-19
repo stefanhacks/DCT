@@ -185,6 +185,10 @@ public class GameManager : MonoBehaviour {
             DataManager.SavePlayerData(currentPlayer, DataManager.LoadPlayers().allPlayers);
         }
 
+        foreach (Transform child in spawnPoint.transform) Destroy(child.gameObject);
+        playerObject.SetActive(false);
+        spawnPoint.SetActive(false);
+
         currentState = GameState.GameOver;
         mManagerInstance.ToggleGameOverPanel();
     }

@@ -166,6 +166,7 @@ public class CharacterManager : MonoBehaviour {
 
     internal KeyValuePair<string, Dictionary<string, int>>[] GetHighScores()
     {
+        data = DataManager.LoadPlayers();
         return (data == null) 
             ? new KeyValuePair<string, Dictionary<string, int>>[0]
             : data.GiveHighScores();

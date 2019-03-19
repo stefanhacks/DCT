@@ -200,7 +200,7 @@ public class GameMenuManager : MonoBehaviour {
         gameOverDialog.SetActive(!newStatus);
         
         // Graphic Raycaster also use this state to define theirs.
-        popUps.GetComponent<GraphicRaycaster>().enabled = newStatus;
+        popUps.GetComponent<GraphicRaycaster>().enabled = !newStatus;
 
         // Gets Highscores
         KeyValuePair<string, Dictionary<string, int>>[] highscores = cmInstance.GetHighScores();
@@ -225,14 +225,24 @@ public class GameMenuManager : MonoBehaviour {
 
     public void PlayButton()
     {
+        gameOverDialog.SetActive(false);
         gmInstance.StartGame(cmInstance.GetCurrentPlayer(), cmInstance.GetPlayerSprites());
         ToggleGameHUD();
     }
 
     public void PauseGameButton()
     {
+        RefreshPlayer();
         gmInstance.PauseGame();
         TogglePauseMenu();
+    }
+
+    public void ChangeCharacterButton()
+    {
+        RefreshPlayer ();
+        changePlayerMenu.SetActive(true);
+        gameMenu.SetActive(true);
+        TogglePopPanel(gameOverDialog);
     }
 
     public void UpdateScore(int gamePoints)

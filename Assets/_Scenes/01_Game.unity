@@ -1635,7 +1635,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 154864510}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.16, z: 1}
+  m_LocalPosition: {x: 0, y: 2.9499998, z: 1}
   m_LocalScale: {x: 0.009, y: 0.009, z: 1}
   m_Children: []
   m_Father: {fileID: 1430158918}
@@ -1711,7 +1711,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 166888989}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.53999996, z: 1}
+  m_LocalPosition: {x: 0, y: 3.3299997, z: 1}
   m_LocalScale: {x: 0.009, y: 0.009, z: 1}
   m_Children: []
   m_Father: {fileID: 1430158918}
@@ -5041,7 +5041,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 673005805}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.55, z: 1}
+  m_LocalPosition: {x: 0, y: 1.24, z: 1}
   m_LocalScale: {x: 0.0099, y: 0.0099, z: 1}
   m_Children: []
   m_Father: {fileID: 1430158918}
@@ -8445,7 +8445,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1261090278}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.72, z: 1}
+  m_LocalPosition: {x: 0, y: 3.5099998, z: 1}
   m_LocalScale: {x: 0.009, y: 0.009, z: 1}
   m_Children: []
   m_Father: {fileID: 1430158918}
@@ -9653,8 +9653,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1430158917}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.3000002, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1261090279}
@@ -9677,7 +9677,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.75}
+  m_Offset: {x: 0, y: 2.1}
   m_Size: {x: 0.8, y: 4}
   m_Direction: 0
 --- !u!114 &1430158920
@@ -10806,11 +10806,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2017223836}
-        m_MethodName: 
+        m_MethodName: PlayButton
         m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 637720371}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -10950,7 +10950,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1647684593}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.9, z: 1}
+  m_LocalPosition: {x: 0, y: 1.8899999, z: 1}
   m_LocalScale: {x: 0.009, y: 0.009, z: 1}
   m_Children: []
   m_Father: {fileID: 1430158918}
@@ -11655,7 +11655,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2017223836}
-        m_MethodName: 
+        m_MethodName: ChangeCharacterButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
