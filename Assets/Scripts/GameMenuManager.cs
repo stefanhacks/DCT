@@ -5,12 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GameMenuManager : MonoBehaviour {
-    public Canvas gameMenu, popUps, inGameHUD;
-    public Text nameField, scoreField;
+    public GameObject gameMenu, popUps, inGameHUD;
+    public Text nameField, scoreField, ingameScoreField;
     public Dropdown dialogBoxDropdown;
     public InputField nameInputField;
     public GameObject characterArea, newPlayerDialog, nameInputWarning, loadPlayerDialog, loadPlayerWarning, deletePlayerDialog;
-
 
     private CharacterManager cmInstance;
     
@@ -164,12 +163,17 @@ public class GameMenuManager : MonoBehaviour {
             TogglePopPanel(newPlayerDialog);
     }
 
-    public void ToggleHUD()
+    public void ToggleGameHUD()
     {
         // Hides Game Menu, brings up HUD.
-        bool newStatus = !inGameHUD.enabled;
+        bool newStatus = !inGameHUD.activeSelf;
 
-        inGameHUD.enabled = newStatus;
-        gameMenu.enabled = !newStatus;
+        inGameHUD.SetActive(newStatus);
+        gameMenu.SetActive(!newStatus);
+    }
+
+    public void UpdateScore(int gamePoints)
+    {
+        ingameScoreField.text = gamePoints.ToString();
     }
 }

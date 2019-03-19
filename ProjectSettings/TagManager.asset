@@ -8,6 +8,8 @@ TagManager:
   - PPScoreField
   - CPCharacterArea
   - PlayerRoot
+  - Obstacle
+  - GameManager
   layers:
   - Default
   - TransparentFX
@@ -17,8 +19,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Details
+  - Obstacle
   - 
   - 
   - 
