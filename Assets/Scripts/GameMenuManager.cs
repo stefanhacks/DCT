@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class that controls the whole Menu Flow for the Game Scene.
+/// Must hold reference to several Menu Objects, TextFields and Dialogs.
+/// </summary>
 public class GameMenuManager : MonoBehaviour {
     [Header("Menu Objects")]
     public GameObject gameMenu;
@@ -43,21 +47,28 @@ public class GameMenuManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Function loads all details from the currentplayer to the appropriate fields.
+    /// </summary>
     public void RefreshPlayer()
     {
-        // Loads all detail from the player to the appropriate fields.
         nameField.text = cmInstance.GetCurrentPlayer().playerName;
         scoreField.text = cmInstance.GetCurrentPlayer().highScore.ToString();
         RefreshPlayerModel(cmInstance.GetPlayerSprites());
     }
-
+    
+    /// <summary>
+    /// Given a string area, finds the game object that holds the sprite to be changed and alters it.
+    /// </summary>
     public void RefreshPlayerModel(string area, Sprite nextSprite)
     {
-        // Finds the game object that has the sprite to be changed and alters it.
         GameObject areaToRefresh = characterArea.transform.Find(area).gameObject;
         areaToRefresh.GetComponent<SpriteRenderer>().sprite = nextSprite;
     }
 
+    /// <summary>
+    /// Fully replaces a character's appearance, based on a Array of Sprites.
+    /// </summary>
     public void RefreshPlayerModel(Sprite[] nextSprites)
     {
         RefreshPlayerModel("eyes", nextSprites[0]);
@@ -67,23 +78,26 @@ public class GameMenuManager : MonoBehaviour {
         RefreshPlayerModel("legs", nextSprites[4]);
     }
 
+    /// <summary>
+    /// Generic function for togling Panels on the Pop Up Canvas.
+    /// It checks it's current status and flips it around.
+    /// Also toggles Canvases GraphicRaycaster's, so inputs don't collide.
+    /// </summary>
     public void TogglePopPanel(GameObject panel)
     {
-        // Generic function for togling pop up panels.
-        // Checks panel for it's current "active" status and flips it.
         bool newStatus = !panel.activeSelf;
-
-        // Graphic Raycasters also use this state to define theirs.
+        
         panel.SetActive(newStatus);
         popUps.GetComponent<GraphicRaycaster>().enabled = newStatus;
         gameMenu.GetComponent<GraphicRaycaster>().enabled = !newStatus;
     }
 
+    /// <summary>
+    /// Relies in TogglePopPanel for it's functionality, but clears name field and forces
+    /// Player to go back to the menu in the case that no player is selected nor was created.
+    /// </summary>
     public void ToggleNewPlayerDialog()
     {
-        // In the case for new player pop up, returns to title if 
-        // there's no current player (first time running the game)
-        // but if there is, then must clear input field.
         if (cmInstance.GetCurrentPlayer() == null)
         {
             BackToTitle();
@@ -95,12 +109,15 @@ public class GameMenuManager : MonoBehaviour {
             TogglePopPanel(newPlayerDialog);
         }
     }
-
+   
+    /// <summary>
+    /// Relies in TogglePopPanel for it's functionality, but creates a dropdown list of options
+    /// with all the player names on it beforehand, allowing them to be properly selected and loaded.
+    /// </summary>
     public void ToggleLoadPlayerDialog()
     {
         if (!loadPlayerDialog.activeSelf)
         {
-            // Creates dropdown list of options, but runs only when opening the menu.
             dialogBoxDropdown.ClearOptions();
             dialogBoxDropdown.options.Insert(0, new Dropdown.OptionData("Select player"));
             dialogBoxDropdown.AddOptions(cmInstance.GetPlayerNames());
@@ -110,15 +127,21 @@ public class GameMenuManager : MonoBehaviour {
         TogglePopPanel(loadPlayerDialog);
     }
 
+    /// <summary>
+    /// Toggles GameHud status, and sets the contrary to the Game Menu.
+    /// </summary>
     public void ToggleGameHUD()
     {
-        // Toggles between Game Menu and HUD.
         bool newStatus = !inGameHUD.activeSelf;
 
         inGameHUD.SetActive(newStatus);
         gameMenu.SetActive(!newStatus);
     }
 
+    /// <summary>
+    /// Relies on ToggleGameHud for it's functionality, but also deactivates the part
+    /// of the Game Menu that allows creating, changing and deleting players.
+    /// </summary>
     public void TogglePauseMenu()
     {
         // Toggles between both HUD and New/Load/Delete player, and Game Menu.
@@ -126,6 +149,9 @@ public class GameMenuManager : MonoBehaviour {
         ToggleGameHUD();
     }
 
+    /// <summary>
+    /// Allows GameOver PopUp to show, loading HighScores on the way and deactivating the GameHud.
+    /// </summary>
     public void ToggleGameOverPanel()
     {
         // Toggles between HUD and GameOver Dialog.
@@ -139,6 +165,11 @@ public class GameMenuManager : MonoBehaviour {
         UpdateHighScores();
     }
 
+    /// <summary>
+    /// Button to finalize Player Creation. 
+    /// Checks if the player already exists, if it does, warns the user, 
+    /// if not, returns to the menu and updates everything.
+    /// </summary>
     public void MakeNewPlayer()
     {
         // If player already exists but user tried to create it even so, call warning box.
@@ -154,6 +185,11 @@ public class GameMenuManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Button to finalize Player Selection.
+    /// Checks if the user selected a name, if it did not, warns the user, 
+    /// if it did, returns to menu and updates everything.
+    /// </summary>
     public void LoadPlayer()
     {
         // Checks if value selected on dropdown differs from initial label one.
@@ -169,6 +205,11 @@ public class GameMenuManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Button to finalize Player Deletion.
+    /// Checks if another player can be loaded, if it cannot, 
+    /// force creating a new one.
+    /// </summary>
     public void DeletePlayer()
     {
         // Deletes current player selected and turns off pop up.
@@ -185,17 +226,24 @@ public class GameMenuManager : MonoBehaviour {
     
     public void BackToTitle()
     {
+        // Time Scale is altered here in the event this is being called by the pause menu.
         Time.timeScale = 1;
         GameObject.FindGameObjectWithTag("SceneSwapper").GetComponent<SceneSwapper>().AnimateExit("00_TitleScene");
     }
 
+    /// <summary>
+    /// Menu Button for starting the game.
+    /// </summary>
     public void PlayButton()
     {
         gameOverDialog.SetActive(false);
         gmInstance.StartGame(cmInstance.GetCurrentPlayer(), cmInstance.GetPlayerSprites());
         ToggleGameHUD();
     }
-
+   
+    /// <summary>
+    /// HUD Button for pausing the game.
+    /// </summary>
     public void PauseGameButton()
     {
         RefreshPlayer();
@@ -203,6 +251,9 @@ public class GameMenuManager : MonoBehaviour {
         TogglePauseMenu();
     }
 
+    /// <summary>
+    /// GameOver Button for changing character.
+    /// </summary>
     public void ChangeCharacterButton()
     {
         RefreshPlayer ();
@@ -217,11 +268,13 @@ public class GameMenuManager : MonoBehaviour {
         popUps.GetComponent<GraphicRaycaster>().enabled = set;
     }
 
+    /// <summary>
+    /// Function called during Player Creation, when user is typing a new name.
+    /// Toggles warning off if it exists, meaning that if player tried
+    /// submitting an existing player name and failed, it's trying again.
+    /// </summary>
     public void CheckForExistingName()
     {
-        // Function that runs during typing a new player name.
-        // Toggles warning off if it exists, meaning that if player tried
-        // submitting an existing player name and failed, it's trying again.
         if (nameInputWarning.activeSelf) nameInputWarning.SetActive(false);
 
         // Checks for possible collision with other player names and flags text red if so.
