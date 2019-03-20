@@ -44,6 +44,7 @@ public class GameData {
 
     /// <summary>
     /// Checks and returns if a Player exists in the database, using it's key as reference.
+    /// Using LINQ, the player names are also all considered to be lowercase.
     /// </summary>
     internal bool PlayerExists(string name)
     {

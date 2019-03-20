@@ -4,6 +4,10 @@ using UnityEngine;
 using System.Linq;
 using System;
 
+/// <summary>
+/// Class that controls Character Appearance, has methods for changing Player
+/// Avatar Parts, holds reference to all possible sprites, GameData and the Current Player.
+/// </summary>
 public class CharacterManager : MonoBehaviour {
 
     public Sprite[] eyesParts, headParts, mouthParts, torsoParts, legsParts;
@@ -13,7 +17,9 @@ public class CharacterManager : MonoBehaviour {
     private PlayerData currentPlayer;
 
     private void Awake()
-    {
+    {   
+        // Game Data is one of the most important Instances in the game flow,
+        // So this is set to run on Awake so it's the first thing run. 
         // Loads all players and sets the current based on the last one played.
         data = DataManager.LoadPlayers();
         if (data != null)
@@ -25,6 +31,7 @@ public class CharacterManager : MonoBehaviour {
     
     public void Start()
     {
+        // Estabilishes a 'helper' array, so every Sprite Array can be reached with a string key.
         areaToArray = new Dictionary<string, Sprite[]>()
         {
             {"eyes", eyesParts},
@@ -56,9 +63,13 @@ public class CharacterManager : MonoBehaviour {
         };
     }
     
+    /// <summary>
+    /// Function for customizing player appearance. Operates with a string and a boolean -
+    /// the first being required to determine what part is being changed and the latter
+    /// to avail if it's the next one on the chain or the previous one.
+    /// </summary>
     private void ChangePart(string part, bool next)
     {
-        // Functions for customizing player appearance.
         // First finds current selected part.
         int currentPart = currentPlayer.bodyComposition[part.ToString()];
         int nextPart;
@@ -80,6 +91,7 @@ public class CharacterManager : MonoBehaviour {
         DataManager.SavePlayerData(currentPlayer, data.allPlayers);
     }
 
+    //Button Functions that flow to ChangePart, since a button cannot have more than one argument.
     public void ChangePartNext(string part)
     {
         this.ChangePart(part, true);
@@ -90,9 +102,12 @@ public class CharacterManager : MonoBehaviour {
         this.ChangePart(part, false);
     }
 
+    /// <summary>
+    /// Creates a new Player based in a string as a Player Name.
+    /// It replaces the old player data, sets it as the current one and updates GameData Save File.
+    /// </summary>
     public void CreateNewPlayer(string newPlayerName)
-    {
-        // Function for Player creation. 
+    { 
         // First replaces old PlayerData.
         Destroy(this.GetComponent<PlayerData>());
         PlayerData newPlayerData = this.gameObject.AddComponent<PlayerData>();
@@ -116,6 +131,10 @@ public class CharacterManager : MonoBehaviour {
         data = DataManager.LoadPlayers();
     }
 
+    /// <summary>
+    /// Flows through a similar process that of Creating a New Player, except it loads
+    /// data from an existing one in the already existing GameData Save File.
+    /// </summary>
     public void LoadPlayerWithKey(string playerKey)
     {
         // Replace old PlayerData.
@@ -127,6 +146,10 @@ public class CharacterManager : MonoBehaviour {
         currentPlayer = newPlayerData;
     }
 
+    /// <summary>
+    /// Deletes the currently selected player. If it is not the only one in the save file,
+    /// automatically loads another one, selected randomly. If it is, also deletes the save file.
+    /// </summary>
     public void DeleteCurrentPlayer()
     {
         // On the event a player is deleted, another one must be loaded. Although
@@ -152,18 +175,27 @@ public class CharacterManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Returns a List of Strings with all the player names in the save file.
+    /// </summary>
     public List<string> GetPlayerNames()
     {
         // Returns player all keys.
         return data.allPlayers.Keys.ToList();
     }
 
+    /// <summary>
+    /// Returns weather or not a given player exists in the save file.
+    /// </summary>
     public bool CheckPlayerKey(string name)
     {
         // Returns if key exists.
         return (data != null && data.PlayerExists(name));
     }
 
+    /// <summary>
+    /// Returns a KVP array for the Highscores in the Save File.
+    /// </summary>
     internal KeyValuePair<string, Dictionary<string, int>>[] GetHighScores()
     {
         data = DataManager.LoadPlayers();

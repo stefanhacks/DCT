@@ -4,6 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// Singular script that handles the Title Screen Scene. Fully encompasses Menu Flow.
+/// </summary>
 public class TitleScreenManager : MonoBehaviour
 {
     public GameObject rootTitle, rootTitleMenu, rootHighScores, rootBG, rootTut;
@@ -21,7 +24,9 @@ public class TitleScreenManager : MonoBehaviour
         data = DataManager.LoadPlayers();
     }
 
-    // UI Code
+    /// <summary>
+    /// Hides all panels with the exception of Title and main menu.
+    /// </summary>
     public void ShowTitleMenu()
     {
         rootTut.SetActive(false);
@@ -30,6 +35,10 @@ public class TitleScreenManager : MonoBehaviour
         rootTitleMenu.SetActive(true);
     }
 
+    /// <summary>
+    /// Hides all panels with the exception of Title and Highscore.
+    /// Also loads and displays current Top 3 Player Highscores.
+    /// </summary>
     public void ShowHighScores()
     {
         rootTitle.SetActive(false);
@@ -38,7 +47,9 @@ public class TitleScreenManager : MonoBehaviour
         LoadHighScores();
     }
 
-    // Sets high score screen.
+    /// <summary>
+    /// Set's up the HighScore menu, updating text objects accordingly.
+    /// </summary>
     public void LoadHighScores()
     {
         KeyValuePair<string, Dictionary<string, int>>[] highscores = (data == null)
@@ -63,11 +74,17 @@ public class TitleScreenManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Fires a transition to Game Scene.
+    /// </summary>
     public void PlayButton()
     {
         GameObject.FindWithTag("SceneSwapper").GetComponent<SceneSwapper>().AnimateExit("01_Game");
     }
 
+    /// <summary>
+    /// Quits Game.
+    /// </summary>
     public void QuitButton()
     {
         Application.Quit();
