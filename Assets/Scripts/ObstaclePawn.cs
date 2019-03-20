@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class for animating and controlling the obstacles (Spheres) during the game.
+/// 
+/// </summary>
 public class ObstaclePawn : MonoBehaviour {
 
     [Header("Generic Obstacle Variables")]
@@ -64,6 +68,11 @@ public class ObstaclePawn : MonoBehaviour {
 
     private void Update()
     {
+        // Checks wich type of the object we are talking about.
+        // A Straight object will move in a straight line, with no alterations.
+        // A Wave object will move according to it's variables, using Sin wave as route.
+        // A Weird object will stop briefly for a random amount of time, before moving foward in a line.
+        // A Fading object can be set to fade harmlessly, or just walks in a straight line.
         switch (obstacleType)
         {
             case TypeOfMovement.Straight:
@@ -82,7 +91,6 @@ public class ObstaclePawn : MonoBehaviour {
 
                     if (!hasStopped && weirdTimer > 1)
                     {
-                        // Act Weird
                         weirdTimer = 0;
                         canMove = false;
                         hasStopped = true;
@@ -114,12 +122,20 @@ public class ObstaclePawn : MonoBehaviour {
         detailObject.Rotate(0, 0, actingSpeed / 1.5f);
     }
 
+    /// <summary>
+    /// Runs a Coroutine that forces the obstacle to stand still during a set duration.
+    /// After the duration is over, obstacle is able to move once again.
+    /// </summary>
     private IEnumerator WaitDuringWeird(float duration)
     {
         yield return new WaitForSeconds(duration);
         canMove = true;        
     }
 
+    /// <summary>
+    /// Runs a Coroutine that lerps an object's material's alpha to zero.
+    /// Soon after it destroys said object, because it should have no Circle Collider.
+    /// </summary>
     private IEnumerator Disappear(float duration)
     {
         float alpha = transform.GetComponent<Renderer>().material.color.a;
@@ -135,6 +151,11 @@ public class ObstaclePawn : MonoBehaviour {
         Destroy(this.gameObject);
     }
 
+    /// <summary>
+    /// Hides the "Shadow" component of the obstacle, a gameplay addition so the player
+    /// can spot a "fake" purple object, set's the required variable for it's logic to true
+    /// and removes it's Circle Collider, so it cannot harm the player.
+    /// </summary>
     public void SetFade()
     {
         fades = true;

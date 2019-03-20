@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class for animating and controlling the player pawn,
+/// a Game Object used in the game loop as the Player's Avatar.
+/// </summary>
 public class PlayerPawn : MonoBehaviour {
     private bool onGround, wasHit;
 
@@ -21,6 +25,10 @@ public class PlayerPawn : MonoBehaviour {
         wasHit = true;
     }
 
+    /// <summary>
+    /// Returns if the Player was hit. Callable function used instead of
+    /// straight OnCollision call for better understanding of gameloop flow.
+    /// </summary>
     public bool GetWasHit()
     {
         return wasHit;
@@ -31,6 +39,10 @@ public class PlayerPawn : MonoBehaviour {
         wasHit = value;
     }
 
+    /// <summary>
+    /// Tries to make the Game Pawn jump. Will fail, with no feedback nor
+    /// exception, if the player is not in contact with the player base.
+    /// </summary>
     internal void TryJump(Vector2 jumpVector)
     {
         // Only jumps if on ground.

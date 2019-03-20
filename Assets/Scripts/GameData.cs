@@ -4,14 +4,16 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-// Class used for storing and serializing saved players from the game.
-
-// Decided to save players as a single dictionary instead of in different
-// objects, which could have resulted in several different save files.
-// In the case for a more complex game, with more data regarding each
-// player this would be preferable and safer - for the case of save data corruption, 
-// for instance. In this instance , however, it does allow me to ignore things such as 
-// finding specific save files and figuring how many there are in the folder.
+/// <summary>
+/// Class used for storing and serializing saved players from the game.
+/// 
+/// Decided to save players as a single dictionary instead of in different
+/// objects, which could have resulted in several different save files.
+/// In the case for a more complex game, with more data regarding each
+/// player this would be preferable and safer - for the case of save data corruption, 
+/// for instance. In this instance , however, it does allow me to ignore things such as 
+/// finding specific save files and figuring how many there are in the folder.
+/// </summary>
 [System.Serializable]
 public class GameData {
     public Dictionary<string, Dictionary<string, int>> allPlayers;

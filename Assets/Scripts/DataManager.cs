@@ -3,16 +3,18 @@ using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
+/// <summary>
+/// Class used for storing and serializing saved players from the game.
+/// 
+/// Decided to save players as a single dictionary instead of in different
+/// objects, which could have resulted in several different save files.
+/// In the case for a more complex game, with more data regarding each
+/// player this would be preferable and safer - for the case of save data corruption, 
+/// for instance. In this case, however, it does allow me to ignore things such as 
+/// finding specific save files and figuring how many there are in the folder.
+/// </summary>
 public static class DataManager {
 
-    // Class used for storing and serializing saved players from the game.
-
-    // Decided to save players as a single dictionary instead of in different
-    // objects, which could have resulted in several different save files.
-    // In the case for a more complex game, with more data regarding each
-    // player this would be preferable and safer - for the case of save data corruption, 
-    // for instance. In this case, however, it does allow me to ignore things such as 
-    // finding specific save files and figuring how many there are in the folder.
 
     /// <summary>
     /// Updates a player entry on the dictionary of players, and formats data to binary.
