@@ -147,8 +147,8 @@ public class CharacterManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Deletes the currently selected player. If it is not the only one in the save file,
-    /// automatically loads another one, selected randomly. If it is, also deletes the save file.
+    /// Deletes the currently selected player. If it is not the only one in the Save File,
+    /// automatically loads another one, selected randomly. If it is, also deletes the Save File.
     /// </summary>
     public void DeleteCurrentPlayer()
     {
@@ -176,7 +176,7 @@ public class CharacterManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Returns a List of Strings with all the player names in the save file.
+    /// Returns a List of Strings with all the player names in the Save File.
     /// </summary>
     public List<string> GetPlayerNames()
     {
@@ -185,7 +185,7 @@ public class CharacterManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Returns weather or not a given player exists in the save file.
+    /// Returns weather or not a given player exists in the Save File.
     /// </summary>
     public bool CheckPlayerKey(string name)
     {

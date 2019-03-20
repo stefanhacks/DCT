@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsAwarded: 1
-  variation: 4
+  variation: 7
   horizontalSpeed: 9
   verticalOffset: 0.5
   waveAmplitude: 0

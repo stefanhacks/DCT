@@ -74,17 +74,11 @@ public class TitleScreenManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Fires a transition to Game Scene.
-    /// </summary>
     public void PlayButton()
     {
         GameObject.FindWithTag("SceneSwapper").GetComponent<SceneSwapper>().AnimateExit("01_Game");
     }
-
-    /// <summary>
-    /// Quits Game.
-    /// </summary>
+    
     public void QuitButton()
     {
         Application.Quit();

@@ -4,7 +4,6 @@ using UnityEngine;
 
 /// <summary>
 /// Class for animating and controlling the obstacles (Spheres) during the game.
-/// 
 /// </summary>
 public class ObstaclePawn : MonoBehaviour {
 

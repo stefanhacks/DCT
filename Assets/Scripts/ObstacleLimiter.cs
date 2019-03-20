@@ -16,7 +16,6 @@ public class ObstacleLimiter : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Simply acts a limit for the obstacles, deleting them.
         if (collision.tag == "Obstacle")
         {
             ObstaclePawn obstaclePawn = collision.gameObject.GetComponent<ObstaclePawn>();

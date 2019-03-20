@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
     public float intervalDivisor = 1.07f;
 
     [Range(1, 120)]
-    [Tooltip("How long player must play before increase in difficulty.")]
+    [Tooltip("How long player must play before new obstacles appearing.")]
     public int difficultyRamp = 40;
 
     [Range(1, 120)]
@@ -162,17 +162,16 @@ public class GameManager : MonoBehaviour {
         if (innerTimer > currentSpawnInterval)
         {
             // Checks for how long player has been playing and if gameplay can get harder.
-            if (playingDuration > difficultyRamp * currentDifficulty && currentDifficulty < 3)
+            if (playingDuration > difficultyRamp * currentDifficulty && currentDifficulty < 4)
             {
                 currentDifficulty += 1;
                 currentSpawnInterval = initialSpawnInterval;
             }
 
-            // maxRange equals = 1, 3, 5 or 7
+            // maxRange equals = 2, 4, 6 or 8
             // Then m/2 equals = 0, 0, 1, 1, 2, 2 or 3
             // Increasing the chance for harder obstacles to be spawned.
-
-            int maxRange = 1 + (currentDifficulty * 2);
+            int maxRange = 2 + (currentDifficulty-1 * 2);
             int spawnChoice = UnityEngine.Random.Range(0, maxRange) / 2;
 
             GameObject obstacle = Instantiate(obstaclePrefabs[spawnChoice], spawnPoint.transform);
@@ -180,7 +179,7 @@ public class GameManager : MonoBehaviour {
                 obstacle.GetComponent<ObstaclePawn>().SetFade();
 
             // If game is the in the last difficulty, adds a chance for the "Fake" obstacle to be thrown again.
-            if (currentDifficulty == 3 && UnityEngine.Random.value < 0.2f)
+            if (currentDifficulty == 4 && UnityEngine.Random.value < 0.2f)
                 Instantiate(obstaclePrefabs[3], spawnPoint.transform).GetComponent<ObstaclePawn>().SetFade();
 
             innerTimer = 0;

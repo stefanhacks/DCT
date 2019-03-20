@@ -54,9 +54,6 @@ public static class DataManager {
         return data;
     }
 
-    /// <summary>
-    /// Deletes the save file.
-    /// </summary>
     public static void DeleteSaveFile()
     {
         // Creates path to file.

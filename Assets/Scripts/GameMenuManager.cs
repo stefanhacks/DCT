@@ -231,9 +231,6 @@ public class GameMenuManager : MonoBehaviour {
         GameObject.FindGameObjectWithTag("SceneSwapper").GetComponent<SceneSwapper>().AnimateExit("00_TitleScene");
     }
 
-    /// <summary>
-    /// Menu Button for starting the game.
-    /// </summary>
     public void PlayButton()
     {
         gameOverDialog.SetActive(false);
@@ -241,9 +238,6 @@ public class GameMenuManager : MonoBehaviour {
         ToggleGameHUD();
     }
    
-    /// <summary>
-    /// HUD Button for pausing the game.
-    /// </summary>
     public void PauseGameButton()
     {
         RefreshPlayer();
@@ -251,9 +245,6 @@ public class GameMenuManager : MonoBehaviour {
         TogglePauseMenu();
     }
 
-    /// <summary>
-    /// GameOver Button for changing character.
-    /// </summary>
     public void ChangeCharacterButton()
     {
         RefreshPlayer ();

@@ -14665,7 +14665,7 @@ MonoBehaviour:
   initialSpawnInterval: 2
   obstacleTreshold: 8
   intervalDivisor: 1.3
-  difficultyRamp: 16
+  difficultyRamp: 10
   jumpForce: 80
   playerObject: {fileID: 1430158917}
   groundObject: {fileID: 474522914}
