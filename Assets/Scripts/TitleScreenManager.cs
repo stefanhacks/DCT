@@ -67,4 +67,9 @@ public class TitleScreenManager : MonoBehaviour
     {
         GameObject.FindWithTag("SceneSwapper").GetComponent<SceneSwapper>().AnimateExit("01_Game");
     }
+
+    public void QuitButton()
+    {
+        Application.Quit();
+    }
 }
