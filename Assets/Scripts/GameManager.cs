@@ -5,7 +5,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 // Adds all dependencies.
-[RequireComponent(typeof(CharacterManager), typeof(GameMenuManager), typeof(PlayerData))]
+[RequireComponent(typeof(CharacterManager))]
+[RequireComponent(typeof(GameMenuManager))]
+[RequireComponent(typeof(PlayerData))]
+[RequireComponent(typeof(GameAreaAnimator))]
 public class GameManager : MonoBehaviour {
 
     [Header("Gameplay Balance Settings")]
@@ -41,17 +44,18 @@ public class GameManager : MonoBehaviour {
     private PlayerData currentPlayer;
     private PlayerPawn playerPawn;
     private Vector3 originalPlayerPosition;
-    private Quaternion originalGroundRotation;
     private GameMenuManager mManagerInstance;
+    private GameAreaAnimator gAreaAnimator;
     
     private GameState currentState;
     private enum GameState {GameMenu, Playing, Paused, GameOver};
 
 	void Start () {
         mManagerInstance = this.GetComponent<GameMenuManager>();
+        gAreaAnimator = this.GetComponent<GameAreaAnimator>();
         playerPawn = playerObject.GetComponent<PlayerPawn>();
         originalPlayerPosition = playerPawn.transform.position;
-        originalGroundRotation = groundObject.transform.rotation;
+        gAreaAnimator.SetReferences(groundObject, difficultyRamp * 4);
     }
 
     private void Update()
@@ -64,20 +68,18 @@ public class GameManager : MonoBehaviour {
             case GameState.Playing:
                 // Core game loop.
                 this.UpdateHUD();
-                this.UpdatePlayArea();
+                this.gAreaAnimator.UpdatePlayArea();
                 this.DoSpawning();
                 this.CheckPlayerInput();
                 this.CheckGameOver();
                 break;
             case GameState.Paused:
-                // Able to happen during Playing.
                 // Opens up customization menu.
                 // Goes back to Playing once toggled off.
                 break;
             case GameState.GameOver:
-                // Shows points made.
-                // Evaluates if it was a highscore.
-                // Goes back to GameMenu or Starting.
+                // Showing points made.
+                // Goes back to GameMenu or Playing.
                 break;
             default:
                 break;
@@ -120,15 +122,30 @@ public class GameManager : MonoBehaviour {
             obstacleCount = 0;
             currentSpawnInterval = initialSpawnInterval;
 
-            // Reset Player.
+            // Reset Player and Ground.
             playerPawn.SetWasHit(false);
             playerObject.transform.position = originalPlayerPosition;
+            gAreaAnimator.Reset();
         }
 
         // Change state.
         currentState = GameState.Playing;
     }
-    
+
+    private void RefreshPlayerObject(Sprite[] nextSprites)
+    {
+        playerObject.transform.Find("eyes").GetComponent<SpriteRenderer>().sprite = nextSprites[0];
+        playerObject.transform.Find("head").GetComponent<SpriteRenderer>().sprite = nextSprites[1];
+        playerObject.transform.Find("mouth").GetComponent<SpriteRenderer>().sprite = nextSprites[2];
+        playerObject.transform.Find("torso").GetComponent<SpriteRenderer>().sprite = nextSprites[3];
+        playerObject.transform.Find("legs").GetComponent<SpriteRenderer>().sprite = nextSprites[4];
+    }
+
+    private void UpdateHUD()
+    {
+        mManagerInstance.UpdateScore(gamePoints);
+    }
+
     private void DoSpawning()
     {
         // Applies frame interval to timers.
@@ -139,26 +156,24 @@ public class GameManager : MonoBehaviour {
         if (innerTimer > currentSpawnInterval)
         {
             // Checks for how long player has been playing,
-            if (playingDuration > difficultyRamp * currentDifficulty)
+            if (playingDuration > difficultyRamp * currentDifficulty && currentDifficulty < 3)
             {
                 currentDifficulty += 1;
                 currentSpawnInterval = initialSpawnInterval;
             }
 
-            // Spawns object according to appropriate difficulty.
-            switch (currentDifficulty)
-            {
-                case 1:
-                    Instantiate(obstaclePrefabs[0], spawnPoint.transform);
-                    break;
-                case 2:
-                    Instantiate(obstaclePrefabs[1], spawnPoint.transform);
-                    break;
-                default:
-                    Instantiate(obstaclePrefabs[2], spawnPoint.transform);
-                    break;
-            }
-            
+            // MaxRange equals = 1, 3, 5, 7
+            int maxRange = 1 + (currentDifficulty * 2);
+            // When x/2 equals = 0, 0, 1, 1, 2, 2, 3
+            int spawnChoice = UnityEngine.Random.Range(0, maxRange) / 2;
+
+            GameObject obstacle = Instantiate(obstaclePrefabs[spawnChoice], spawnPoint.transform);
+            if (spawnChoice == 3 && UnityEngine.Random.value > 0.5f)
+                obstacle.GetComponent<ObstaclePawn>().SetFade();
+
+            if (currentDifficulty == 3 && UnityEngine.Random.value < 0.8f)
+                Instantiate(obstaclePrefabs[3], spawnPoint.transform).GetComponent<ObstaclePawn>().SetFade();
+
             innerTimer = 0;
             obstacleCount++;
             if (obstacleCount > obstacleTreshold)
@@ -207,30 +222,7 @@ public class GameManager : MonoBehaviour {
         currentState = GameState.GameOver;
         mManagerInstance.ToggleGameOverPanel();
     }
-
-    private void RefreshPlayerObject(Sprite[] nextSprites)
-    {
-        playerObject.transform.Find("eyes").GetComponent<SpriteRenderer>().sprite = nextSprites[0];
-        playerObject.transform.Find("head").GetComponent<SpriteRenderer>().sprite = nextSprites[1];
-        playerObject.transform.Find("mouth").GetComponent<SpriteRenderer>().sprite = nextSprites[2];
-        playerObject.transform.Find("torso").GetComponent<SpriteRenderer>().sprite = nextSprites[3];
-        playerObject.transform.Find("legs").GetComponent<SpriteRenderer>().sprite = nextSprites[4];
-    }
-
-    private void UpdateHUD()
-    {
-        mManagerInstance.UpdateScore(gamePoints);
-    }
-
-    private void UpdatePlayArea()
-    {
-        float rotationTotal = playingDuration / (difficultyRamp * 5);
-        groundObject.transform.rotation = Quaternion.Lerp(
-            originalGroundRotation,
-            Quaternion.AngleAxis(30, Vector3.forward),
-            rotationTotal);
-    }
-        
+            
     public void ObstacleDodged(int pointsValue)
     {
         gamePoints += pointsValue;

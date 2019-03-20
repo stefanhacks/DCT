@@ -10,7 +10,10 @@ public class PlayerPawn : MonoBehaviour {
     {
         // Must collide with Root to stablish ground.
         if (collision.gameObject.tag == "PlayerRoot")
+        {
             onGround = true;
+            this.GetComponent<Animator>().SetBool("OnGround", true);
+        }   
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -33,6 +36,7 @@ public class PlayerPawn : MonoBehaviour {
         // Only jumps if on ground.
         if (!onGround) return;
 
+        this.GetComponent<Animator>().SetBool("OnGround", false);
         this.gameObject.GetComponent<Rigidbody2D>().AddForce(jumpVector);
         onGround = false;
     }

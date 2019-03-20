@@ -465,7 +465,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsAwarded: 3
-  horizontalSpeed: 10
-  verticalAmplitude: 5
-  variation: 10
-  obstacleType: 0
+  variation: 4
+  horizontalSpeed: 7
+  verticalOffset: 6.8
+  waveAmplitude: 1.1
+  waveFrequency: 1.7
+  obstacleType: 1
