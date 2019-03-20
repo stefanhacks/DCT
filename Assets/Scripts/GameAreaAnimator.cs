@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Simple class that controls the simple animation flow of the game.
+/// At this point, basically rotates the Ground Game Object.
+/// But could be expanded further.
+/// </summary>
 public class GameAreaAnimator : MonoBehaviour {
 
     private int groundToAngle;
