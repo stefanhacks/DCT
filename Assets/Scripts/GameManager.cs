@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Class responsible for all the main game loop logic and gameplay effects.
+/// Holds references to several other scripts and requires them to be added
+/// to it's game object in order to properly run.
+/// </summary>
 // Adds all dependencies.
 [RequireComponent(typeof(CharacterManager))]
 [RequireComponent(typeof(GameMenuManager))]
@@ -55,11 +60,13 @@ public class GameManager : MonoBehaviour {
         gAreaAnimator = this.GetComponent<GameAreaAnimator>();
         playerPawn = playerObject.GetComponent<PlayerPawn>();
         originalPlayerPosition = playerPawn.transform.position;
+        // Second value is arbitrary and decided based on game feel.
         gAreaAnimator.SetReferences(groundObject, difficultyRamp * 4);
     }
 
     private void Update()
     {
+        // Core game loop.
         switch (currentState)
         {
             case GameState.GameMenu:
@@ -91,25 +98,24 @@ public class GameManager : MonoBehaviour {
         PrepareGame(playerSprites);
         currentPlayer = player;
     }
-
+    
     public void PauseGame()
     {
-        // Pausing stuff;
         Time.timeScale = 0;
         playerObject.SetActive(false);
         spawnPoint.SetActive(false);
         currentState = GameState.Paused;
     }
 
+    /// <summary>
+    /// Resets all relevant game variables, updates player appearance and enables needed objects for gameplay.
+    /// </summary>
     private void PrepareGame(Sprite[] playerSprites)
     {
-        // Must alter player object and activate spawn point.
         RefreshPlayerObject(playerSprites);
         playerObject.SetActive(true);
         spawnPoint.SetActive(true);
 
-        // If previous game state was "Paused", needs to reset timeScale.
-        // If it wasn't, needs to reset all relevant gameplay variables.
         if (currentState == GameState.Paused)
         {
             Time.timeScale = 1;
@@ -128,7 +134,6 @@ public class GameManager : MonoBehaviour {
             gAreaAnimator.Reset();
         }
 
-        // Change state.
         currentState = GameState.Playing;
     }
 
@@ -146,32 +151,36 @@ public class GameManager : MonoBehaviour {
         mManagerInstance.UpdateScore(gamePoints);
     }
 
+    /// <summary>
+    /// Houses the Game Spawning logic.
+    /// </summary>
     private void DoSpawning()
     {
-        // Applies frame interval to timers.
         playingDuration += Time.deltaTime;
         innerTimer += Time.deltaTime;
 
-        // Checks if obstacle needs to be spawned and runs gameplay timer logic.
         if (innerTimer > currentSpawnInterval)
         {
-            // Checks for how long player has been playing,
+            // Checks for how long player has been playing and if gameplay can get harder.
             if (playingDuration > difficultyRamp * currentDifficulty && currentDifficulty < 3)
             {
                 currentDifficulty += 1;
                 currentSpawnInterval = initialSpawnInterval;
             }
 
-            // MaxRange equals = 1, 3, 5, 7
+            // maxRange equals = 1, 3, 5 or 7
+            // Then m/2 equals = 0, 0, 1, 1, 2, 2 or 3
+            // Increasing the chance for harder obstacles to be spawned.
+
             int maxRange = 1 + (currentDifficulty * 2);
-            // When x/2 equals = 0, 0, 1, 1, 2, 2, 3
             int spawnChoice = UnityEngine.Random.Range(0, maxRange) / 2;
 
             GameObject obstacle = Instantiate(obstaclePrefabs[spawnChoice], spawnPoint.transform);
             if (spawnChoice == 3 && UnityEngine.Random.value > 0.5f)
                 obstacle.GetComponent<ObstaclePawn>().SetFade();
 
-            if (currentDifficulty == 3 && UnityEngine.Random.value < 0.1f)
+            // If game is the in the last difficulty, adds a chance for the "Fake" obstacle to be thrown again.
+            if (currentDifficulty == 3 && UnityEngine.Random.value < 0.2f)
                 Instantiate(obstaclePrefabs[3], spawnPoint.transform).GetComponent<ObstaclePawn>().SetFade();
 
             innerTimer = 0;
@@ -183,18 +192,18 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
-
+ 
+    /// <summary>
+    /// Do Input managing. Although this will result in a rigidbody 
+    /// being altered in regular Update, this is left as is to avoid 
+    /// input loss and not being a continuous button press check.
+    /// </summary>
     private void CheckPlayerInput()
     {
-        // Do Input managing. Although this will result in a rigidbody 
-        // being altered, this is left handled by regular Update as 
-        // to avoid input loss, not being a continuous button press check.
         if (Input.GetButtonDown("Jump"))
         {
             playerPawn.TryJump(new Vector2(0, jumpForce));
         }
-        // Since mouse play is enabled, checks if UI is being clicked.
-        // If it is, player is pausing the game, so don't jump.
         else if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             playerPawn.TryJump(new Vector2(0, jumpForce));
@@ -205,6 +214,10 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Checks if game should end, and if it should, if player's current
+    /// game points are enough to replace it's highscore.
+    /// </summary>
     private void CheckGameOver()
     {
         if (!playerPawn.GetWasHit()) return;
