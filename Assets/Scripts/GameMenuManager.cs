@@ -86,8 +86,7 @@ public class GameMenuManager : MonoBehaviour {
         // but if there is, then must clear input field.
         if (cmInstance.GetCurrentPlayer() == null)
         {
-            // TODO BETTER
-            UnityEngine.SceneManagement.SceneManager.LoadScene("00_TitleScene");
+            BackToTitle();
         }
         else
         {
@@ -182,6 +181,12 @@ public class GameMenuManager : MonoBehaviour {
             RefreshPlayer();
         else
             TogglePopPanel(newPlayerDialog);
+    }
+    
+    public void BackToTitle()
+    {
+        Time.timeScale = 1;
+        GameObject.FindGameObjectWithTag("SceneSwapper").GetComponent<SceneSwapper>().AnimateExit("00_TitleScene");
     }
 
     public void PlayButton()

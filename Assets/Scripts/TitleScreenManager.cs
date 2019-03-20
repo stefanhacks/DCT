@@ -6,7 +6,7 @@ using System.Linq;
 
 public class TitleScreenManager : MonoBehaviour
 {
-    public GameObject rootTitle, rootTitleMenu, rootHighScores, rootBG;
+    public GameObject rootTitle, rootTitleMenu, rootHighScores, rootBG, rootTut;
     public Text scoreNames, scorePoints;
     private GameData data;
 
@@ -19,12 +19,12 @@ public class TitleScreenManager : MonoBehaviour
 
         // Loads data object, may be null if first time running.
         data = DataManager.LoadPlayers();
-        Invoke("ShowTitleMenu", 1);
     }
 
     // UI Code
     public void ShowTitleMenu()
     {
+        rootTut.SetActive(false);
         rootTitle.SetActive(true);
         rootHighScores.SetActive(false);
         rootTitleMenu.SetActive(true);
@@ -61,5 +61,10 @@ public class TitleScreenManager : MonoBehaviour
                 scorePoints.text += "-\n";
             }            
         }
+    }
+
+    public void PlayButton()
+    {
+        GameObject.FindWithTag("SceneSwapper").GetComponent<SceneSwapper>().AnimateExit("01_Game");
     }
 }

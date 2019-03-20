@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour {
             if (spawnChoice == 3 && UnityEngine.Random.value > 0.5f)
                 obstacle.GetComponent<ObstaclePawn>().SetFade();
 
-            if (currentDifficulty == 3 && UnityEngine.Random.value < 0.8f)
+            if (currentDifficulty == 3 && UnityEngine.Random.value < 0.1f)
                 Instantiate(obstaclePrefabs[3], spawnPoint.transform).GetComponent<ObstaclePawn>().SetFade();
 
             innerTimer = 0;

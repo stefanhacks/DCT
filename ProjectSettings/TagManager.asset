@@ -11,6 +11,7 @@ TagManager:
   - Obstacle
   - GameManager
   - BGSky
+  - SceneSwapper
   layers:
   - Default
   - TransparentFX
