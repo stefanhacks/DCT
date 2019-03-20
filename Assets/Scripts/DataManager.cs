@@ -4,7 +4,19 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class DataManager {
-    
+
+    // Class used for storing and serializing saved players from the game.
+
+    // Decided to save players as a single dictionary instead of in different
+    // objects, which could have resulted in several different save files.
+    // In the case for a more complex game, with more data regarding each
+    // player this would be preferable and safer - for the case of save data corruption, 
+    // for instance. In this case, however, it does allow me to ignore things such as 
+    // finding specific save files and figuring how many there are in the folder.
+
+    /// <summary>
+    /// Updates a player entry on the dictionary of players, and formats data to binary.
+    /// </summary>
     public static void SavePlayerData(PlayerData currentPlayer, Dictionary<string, Dictionary<string, int>> playerBase)
     {
         // Creates path to file.
@@ -20,6 +32,9 @@ public static class DataManager {
         stream.Close();
     }
 
+    /// <summary>
+    /// Deserializes player file and returns its data as a GameData object.
+    /// </summary>
     public static GameData LoadPlayers()
     {
         // Creates path to file.
@@ -37,6 +52,9 @@ public static class DataManager {
         return data;
     }
 
+    /// <summary>
+    /// Deletes the save file.
+    /// </summary>
     public static void DeleteSaveFile()
     {
         // Creates path to file.

@@ -40,6 +40,9 @@ public class GameData {
             allPlayers.Add(lastPlayer, currentPlayerData);
     }
 
+    /// <summary>
+    /// Checks and returns if a Player exists in the database, using it's key as reference.
+    /// </summary>
     internal bool PlayerExists(string name)
     {
         // Returns if provided name string is a key in the dictionary. Also checks if it exists.
@@ -49,6 +52,10 @@ public class GameData {
             return allPlayers.Keys.Where(n => n.ToLower() == name.ToLower()).Count() != 0;
     }
 
+    /// <summary>
+    /// Orders player database by highscore, taking the top three and returning them as an array.
+    /// Will also return an empty array if the save file doesn't exist.
+    /// </summary>
     public KeyValuePair<string, Dictionary<string, int>>[] GiveHighScores()
     {
         return allPlayers.OrderByDescending(s => s.Value["highscore"]).Take(3).DefaultIfEmpty().ToArray();

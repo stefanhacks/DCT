@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Class used for storiing data from a specific player and referencing it.
+// Class used for storing data from a specific player.
+// It's values are referenced for the current player's,
+// and an object of this instance is necessary to Save the game.
 public class PlayerData : MonoBehaviour {
 
     [HideInInspector]
